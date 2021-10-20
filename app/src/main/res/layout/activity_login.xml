@@ -4,15 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
-    tools:context=".MainActivity">
-
-    <com.andrognito.patternlockview.PatternLockView
-        android:id="@+id/pattern_lock_view"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="225dp" />
-
+    tools:context=".Login">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
