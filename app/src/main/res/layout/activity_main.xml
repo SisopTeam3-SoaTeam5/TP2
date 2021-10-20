@@ -9,10 +9,14 @@
 
     <com.andrognito.patternlockview.PatternLockView
         android:id="@+id/pattern_lock_view"
-        android:layout_width="280dp"
+        android:layout_width="0dp"
         android:layout_height="280dp"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="225dp" />
+        android:layout_marginStart="65dp"
+        android:layout_marginEnd="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
