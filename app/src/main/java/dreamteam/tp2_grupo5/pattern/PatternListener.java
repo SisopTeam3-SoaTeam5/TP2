@@ -30,11 +30,11 @@ public class PatternListener implements PatternLockViewListener {
     public void onComplete(List<PatternLockView.Dot> pattern) {
         String finalPattern = PatternLockUtils.patternToString(patternLockView, pattern);
         if(finalPattern.equals(key)){
-            Toast.makeText(context, "Correcto :)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "You're in :)", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, Login.class);
             context.startActivity(intent);
         }else{
-            Toast.makeText(context, "Incorrecto :(", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Wrong :(", Toast.LENGTH_SHORT).show();
         }
     }
 
