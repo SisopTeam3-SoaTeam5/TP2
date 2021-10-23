@@ -13,9 +13,14 @@ public class Constants {
     public final static String emailValidationError = "Should be a valid email";
     public final static String emptyEmail = "Email should not be empty";
     public final static String passwordLengthMsg = "Password should be at least 8 char long";
-    public final static String passwordMatchError = "Doesn't match";
+    public final static String passwordMatchError = "Passwords doesn't match";
     public final static List<String> commissionValues = Arrays.asList("2900","3900");
     public final static String successMsg = "Success";
     public final static String testEnv = "TEST";
     public final static String prodEnv = "PROD";
+    public final static String welcomeMsg = "Welcome!";
+    public final static String registration = "Registration";
+    public final static String correctPattern = "You're in :)";
+    public final static String wrongPattern = "Wrong :(";
+
 }

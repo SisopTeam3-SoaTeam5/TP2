@@ -137,4 +137,9 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         Intent intent = new Intent(Registration.this, c);
         startActivity(intent);
     }
+
+    @Override
+    public String getEndpoint(){
+        return Constants.registration;
+    }
 }

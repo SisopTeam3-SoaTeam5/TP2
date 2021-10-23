@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.Homepage;
 
 
@@ -68,7 +69,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
             statusCode = httpURLConnection.getResponseCode();
             String response;
 
-            if (statusCode ==  200) {
+            if (statusCode ==  200 && caller.getEndpoint().equals(Constants.registration)) {
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                 response = convertInputStreamToString(inputStream);
             }else {
@@ -92,7 +93,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
                 return;
             }
             if(statusCode == 200){
-                caller.showToast("Welcome!");
+                caller.showToast(Constants.welcomeMsg);
                 caller.activityTo(Homepage.class);
                 return;
             }
