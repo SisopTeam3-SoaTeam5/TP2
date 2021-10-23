@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import dreamteam.tp2_grupo5.async.HttpPost;
 import dreamteam.tp2_grupo5.states.ValidationState;
 
 public class Registration extends AppCompatActivity {
@@ -36,18 +40,19 @@ public class Registration extends AppCompatActivity {
         commission = findViewById(R.id.editTextNumber2);
         group = findViewById(R.id.editTextNumber3);
 
-
     }
 
     public void registerHandler(View view){
         boolean ok = true;
-        ValidationState validateEmail = validateEmail(email);
+
+        String emailText = email.getText().toString();
+        ValidationState validateEmail = validateEmail(emailText);
         if(!validateEmail.getStatus()){
             ok = false;
             Toast.makeText(Registration.this, validateEmail.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-        ValidationState validatePassword = validatePassword(password, repeatedPassword);
+        String passwordText = password.getText().toString();
+        ValidationState validatePassword = validatePassword(passwordText, repeatedPassword);
 
         if(!validatePassword.getStatus()){
             ok= false;
@@ -58,19 +63,42 @@ public class Registration extends AppCompatActivity {
 
         if(!commissionText.equals("2900") && !commissionText.equals("3900")){
             ok = false;
-            Toast.makeText(Registration.this, "Commission should be 2900 oe 3900", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Registration.this, "Commission should be 2900 or 3900", Toast.LENGTH_SHORT).show();
+        }
+        String nameText = name.getText().toString();
+        String lastnameText = lastname.getText().toString();
+        String dniText = dni.getText().toString();
+        String groupText = group.getText().toString();
+
+
+        if(nameText.isEmpty() || lastnameText.isEmpty() || dniText.isEmpty() || groupText.isEmpty()){
+            ok = false;
+            Toast.makeText(Registration.this, "Fields should not be empty", Toast.LENGTH_SHORT).show();
         }
 
+
+        Map<String,String> values = new HashMap<>();
+        values.put("env","TEST");
+        values.put("name",nameText);
+        values.put("lastname",lastnameText);
+        values.put("dni",dniText);
+        values.put("email", emailText);
+        values.put("password", passwordText );
+        values.put("commission", commissionText);
+        values.put("group",groupText);
+
         if(ok) {
-            Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Registration.this, Login.class);
-            startActivity(intent);
+            HttpPost task = new HttpPost(values);
+            task.execute("http://so-unlam.net.ar/api/api/register");
+//            if(task.getStatusCode() == 200){
+//                Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(Registration.this, Homepage.class);
+//                startActivity(intent);
+//            } Mover esto
         }
     }
 
-    private ValidationState validateEmail(EditText email){
-
-        String emailText = email.getText().toString();
+    private ValidationState validateEmail(String emailText){
 
         if(emailText.isEmpty()){
             return new ValidationState(false, "Email should not be empty");
@@ -83,9 +111,8 @@ public class Registration extends AppCompatActivity {
         return new ValidationState(true,"Success");
     }
 
-    private ValidationState validatePassword(EditText password, EditText repeatedPassword){
-        int minimumLength = 8;
-        String passwordText = password.getText().toString();
+    private ValidationState validatePassword(String passwordText, EditText repeatedPassword){
+        int minimumLength = 8; // <--Change this to a local env
 
         if(passwordText.isEmpty() || passwordText.length() < minimumLength ){
             return new ValidationState(false, "Password should be at least 8 char long");
