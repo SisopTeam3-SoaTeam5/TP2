@@ -79,7 +79,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
 
         Map<String, String> values = new HashMap<>();
-        values.put("env", Constants.testEnv);
+        values.put("env", Constants.prodEnv);
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);
@@ -89,7 +89,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("group", groupText);
 
         HttpPost task = new HttpPost(values, Registration.this);
-        task.execute(Constants.baseUrl + "register");
+        task.execute(Constants.baseUrl + Constants.register);
     }
 
     private ValidationState validateEmail(String emailText) {
@@ -140,6 +140,6 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
     @Override
     public String getEndpoint(){
-        return Constants.registration;
+        return Constants.register;
     }
 }

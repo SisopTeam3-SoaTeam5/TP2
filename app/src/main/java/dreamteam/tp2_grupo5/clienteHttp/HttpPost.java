@@ -69,7 +69,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
             statusCode = httpURLConnection.getResponseCode();
             String response;
 
-            if (statusCode ==  200 && caller.getEndpoint().equals(Constants.registration)) {
+            if (statusCode ==  200 ) {
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                 response = convertInputStreamToString(inputStream);
             }else {
@@ -92,8 +92,12 @@ public class HttpPost extends AsyncTask<String, String, String> {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
-            if(statusCode == 200){
-                caller.showToast(Constants.welcomeMsg);
+            if(statusCode == 200 && caller.getEndpoint().equals(Constants.register)) {
+                caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Registrado corectamente"
+                caller.activityTo(Homepage.class);
+                return;
+            }else if(statusCode == 200 && caller.getEndpoint().equals(Constants.login)){
+                caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Loggeado corectamente"
                 caller.activityTo(Homepage.class);
                 return;
             }
