@@ -16,6 +16,11 @@ public class Registration extends AppCompatActivity {
     EditText email;
     EditText password;
     EditText repeatedPassword;
+    EditText name;
+    EditText lastname;
+    EditText dni;
+    EditText commission;
+    EditText group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,24 +30,42 @@ public class Registration extends AppCompatActivity {
         email = findViewById(R.id.editTextTextEmailAddress);
         password = findViewById(R.id.editTextTextPassword);
         repeatedPassword = findViewById(R.id.editTextTextPassword2);
+        name = findViewById(R.id.editTextTextPersonName);
+        lastname = findViewById(R.id.editTextTextPersonName3);
+        dni = findViewById(R.id.editTextNumber);
+        commission = findViewById(R.id.editTextNumber2);
+        group = findViewById(R.id.editTextNumber3);
+
+
     }
 
     public void registerHandler(View view){
+        boolean ok = true;
         ValidationState validateEmail = validateEmail(email);
-
         if(!validateEmail.getStatus()){
+            ok = false;
             Toast.makeText(Registration.this, validateEmail.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         ValidationState validatePassword = validatePassword(password, repeatedPassword);
 
         if(!validatePassword.getStatus()){
+            ok= false;
             Toast.makeText(Registration.this, validatePassword.getMessage() , Toast.LENGTH_SHORT).show(); //Chequear como mostrar ambos toast si suceden al mismo tiempo.
         }
 
-        Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(Registration.this, Login.class);
-        startActivity(intent);
+        String commissionText = commission.getText().toString();
+
+        if(!commissionText.equals("2900") && !commissionText.equals("3900")){
+            ok = false;
+            Toast.makeText(Registration.this, "Commission should be 2900 oe 3900", Toast.LENGTH_SHORT).show();
+        }
+
+        if(ok) {
+            Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Registration.this, Login.class);
+            startActivity(intent);
+        }
     }
 
     private ValidationState validateEmail(EditText email){
@@ -56,8 +79,6 @@ public class Registration extends AppCompatActivity {
         if(!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()){
             return new ValidationState(false, "Should be a valid email");
         }
-
-        //Estaria bueno verificar por aca si el email ya existe en la BDD
 
         return new ValidationState(true,"Success");
     }
