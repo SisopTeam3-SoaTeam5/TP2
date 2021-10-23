@@ -70,13 +70,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         if (nameText.isEmpty() || lastnameText.isEmpty() || dniText.isEmpty() || groupText.isEmpty())
             showError = addErrorText(showError, "Fields should not be empty");
 
-<<<<<<< HEAD
-        Map<String,String> values = new HashMap<>();
-        values.put("env","TEST");
-        values.put("name",nameText);
-        values.put("lastname",lastnameText);
-        values.put("dni",dniText);
-=======
+
 
         if (!showError.equals(""))
             Toast.makeText(Registration.this, showError, Toast.LENGTH_SHORT).show();
@@ -87,26 +81,13 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);
->>>>>>> 044da8b706805f57e4494fcb389c24e5f75a3733
         values.put("email", emailText);
         values.put("password", passwordText);
         values.put("commission", commissionText);
         values.put("group", groupText);
 
-<<<<<<< HEAD
-        if(ok) {
-            HttpPost task = new HttpPost(values, Registration.this);
-            task.execute("http://so-unlam.net.ar/api/api/register");
-        }
-=======
-        HttpPost task = new HttpPost(values);
+        HttpPost task = new HttpPost(values, Registration.this);
         task.execute("http://so-unlam.net.ar/api/api/register");
-//            if(task.getStatusCode() == 200){
-//                Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(Registration.this, Homepage.class);
-//                startActivity(intent);
-//            } Mover esto
->>>>>>> 044da8b706805f57e4494fcb389c24e5f75a3733
     }
 
     private ValidationState validateEmail(String emailText) {
