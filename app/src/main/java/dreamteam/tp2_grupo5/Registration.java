@@ -2,6 +2,7 @@ package dreamteam.tp2_grupo5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -12,10 +13,11 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
-import dreamteam.tp2_grupo5.async.HttpPost;
+import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPost;
 import dreamteam.tp2_grupo5.states.ValidationState;
 
-public class Registration extends AppCompatActivity {
+public class Registration extends AppCompatActivity implements AsyncInterface {
 
     EditText email;
     EditText password;
@@ -76,7 +78,6 @@ public class Registration extends AppCompatActivity {
             Toast.makeText(Registration.this, "Fields should not be empty", Toast.LENGTH_SHORT).show();
         }
 
-
         Map<String,String> values = new HashMap<>();
         values.put("env","TEST");
         values.put("name",nameText);
@@ -88,13 +89,8 @@ public class Registration extends AppCompatActivity {
         values.put("group",groupText);
 
         if(ok) {
-            HttpPost task = new HttpPost(values);
+            HttpPost task = new HttpPost(values, Registration.this);
             task.execute("http://so-unlam.net.ar/api/api/register");
-//            if(task.getStatusCode() == 200){
-//                Toast.makeText(Registration.this, "Welcome!", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(Registration.this, Homepage.class);
-//                startActivity(intent);
-//            } Mover esto
         }
     }
 
@@ -124,5 +120,17 @@ public class Registration extends AppCompatActivity {
         }
 
         return new ValidationState(true,"Success") ;
+    }
+
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText(Registration.this, msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void activityTo(Class c){
+        Intent intent = new Intent(Registration.this, c);
+        startActivity(intent);
     }
 }

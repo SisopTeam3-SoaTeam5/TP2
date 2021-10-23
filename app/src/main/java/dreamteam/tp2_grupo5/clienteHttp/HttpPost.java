@@ -1,11 +1,10 @@
-package dreamteam.tp2_grupo5.async;
+package dreamteam.tp2_grupo5.clienteHttp;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -20,15 +19,19 @@ import java.net.URL;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Homepage;
-import dreamteam.tp2_grupo5.Registration;
+
 
 public class HttpPost extends AsyncTask<String, String, String> {
 
-    private JSONObject postData;
+    private final JSONObject postData;
+    private Exception exception;
+    private AsyncInterface caller;
     private int statusCode;
 
-    public HttpPost(Map<String, String> postData) {
+    public HttpPost(Map<String, String> postData, Context a) {
         this.postData = new JSONObject(postData);
+        this.exception = null;
+        this.caller = (AsyncInterface) a;
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
@@ -63,26 +66,42 @@ public class HttpPost extends AsyncTask<String, String, String> {
             }
 
             statusCode = httpURLConnection.getResponseCode();
+            String response;
 
             if (statusCode ==  200) {
-
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
-
-                String response = convertInputStreamToString(inputStream);
-
-                System.out.println(response);
-
+                response = convertInputStreamToString(inputStream);
             }else {
-                System.out.println("Status: "+statusCode);
+                response = httpURLConnection.getResponseMessage();
             }
+            return response;
 
         }catch (Exception e){
+            exception=e;
             Log.d(TAG,e.getLocalizedMessage());
+            return null;
         }
-        return null;
+
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    protected void onPostExecute(String response){
+        try{
+            super.onPostExecute(response);
+            if( exception != null){
+                caller.showToast("Error: " + exception.toString());
+                return;
+            }
+            if(statusCode == 200){
+                caller.showToast("Welcome!");
+                caller.activityTo(Homepage.class);
+                return;
+            }
+
+            caller.showToast("Error: " + response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
 }
