@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.JsonWriter;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -23,7 +22,8 @@ import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.Homepage;
-import dreamteam.tp2_grupo5.session.Session;
+import dreamteam.tp2_grupo5.session.SessionManager;
+import dreamteam.tp2_grupo5.session.SessionMapper;
 
 
 public class HttpPost extends AsyncTask<String, String, String> {
@@ -99,11 +99,11 @@ public class HttpPost extends AsyncTask<String, String, String> {
             }
             if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.register)) {    //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                 caller.showToast(Constants.successRegister);
-                Session s = handleLoginAndRegistration(response);
+                handleLoginAndRegistration(response);
                 return;
             } else if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.login)) {
                 caller.showToast(Constants.successLoggin);
-                Session s = handleLoginAndRegistration(response);
+                handleLoginAndRegistration(response);
                 return;
             }
 
@@ -114,12 +114,14 @@ public class HttpPost extends AsyncTask<String, String, String> {
         }
     }
 
-    private Session handleLoginAndRegistration(String response){
+    private void handleLoginAndRegistration(String response){
         Gson gson = new Gson();
-        Session session = gson.fromJson(response, Session.class);
-        //lamar al metodo cron
+        SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
+        SessionManager.token = sessionMap.token;
+        SessionManager.tokenRefresh = sessionMap.tokenRefresh;
+        //lamar al metodo cron del manager
+        System.out.println("created session: " + SessionManager.token);
         caller.activityTo(Homepage.class);
-        return session;
     }
 
 }

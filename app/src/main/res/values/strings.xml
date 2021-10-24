@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TP2-Grupo5</string>
+    <string name="logout">logout</string>
 </resources>
