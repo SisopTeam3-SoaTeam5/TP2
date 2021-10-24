@@ -99,11 +99,11 @@ public class HttpPost extends AsyncTask<String, String, String> {
             }
             if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.register)) {    //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                 caller.showToast(Constants.successRegister);
-                handleLoginAndRegistration(response);
+                Session s = handleLoginAndRegistration(response);
                 return;
             } else if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.login)) {
                 caller.showToast(Constants.successLoggin);
-                handleLoginAndRegistration(response);
+                Session s = handleLoginAndRegistration(response);
                 return;
             }
 
