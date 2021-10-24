@@ -58,8 +58,8 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
             showError = addErrorText(showError, validatePassword.getMessage());
 
         String commissionText = commission.getText().toString();
-        if (!commissionText.equals("2900") && !commissionText.equals("3900"))
-            showError = addErrorText(showError, "Commission should be 2900 or 3900");
+        if (!Constants.commissionValues.contains(commissionText))
+            showError = addErrorText(showError, Constants.commissionValidationError);
 
         String nameText = name.getText().toString();
         String lastnameText = lastname.getText().toString();
@@ -68,19 +68,18 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
 
         if (nameText.isEmpty() || lastnameText.isEmpty() || dniText.isEmpty() || groupText.isEmpty())
-            showError = addErrorText(showError, "Fields should not be empty");
+            showError = addErrorText(showError, Constants.fieldsValidationError);
 
 
 
-        if (!showError.equals("")){
+        if (!showError.equals("")) {
             Toast.makeText(Registration.this, showError, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        System.out.println("sigue");
 
         Map<String, String> values = new HashMap<>();
-        values.put("env", "TEST");
+        values.put("env", Constants.prodEnv);
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);
@@ -90,35 +89,34 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("group", groupText);
 
         HttpPost task = new HttpPost(values, Registration.this);
-        task.execute("http://so-unlam.net.ar/api/api/register");
+        task.execute(Constants.baseUrl + Constants.register);
     }
 
     private ValidationState validateEmail(String emailText) {
 
         if (emailText.isEmpty()) {
-            return new ValidationState(false, "Email should not be empty");
+            return new ValidationState(false, Constants.emptyEmail);
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
-            return new ValidationState(false, "Should be a valid email");
+            return new ValidationState(false, Constants.emailValidationError);
         }
 
-        return new ValidationState(true, "Success");
+        return new ValidationState(true, Constants.successMsg);
     }
 
     private ValidationState validatePassword(String passwordText, EditText repeatedPassword) {
-        int minimumLength = 8; // <--Change this to a local env
+        int minimumLength = Constants.passwordMinLength;
 
         if (passwordText.isEmpty() || passwordText.length() < minimumLength) {
-            return new ValidationState(false, "Password should be at least 8 char long");
+            return new ValidationState(false, Constants.passwordLengthMsg);
         }
 
         if (!passwordText.equals(repeatedPassword.getText().toString())) {
-            System.out.println(passwordText + "!=" + repeatedPassword.getText().toString());
-            return new ValidationState(false, "Doesn't match");
+            return new ValidationState(false, Constants.passwordMatchError);
         }
 
-        return new ValidationState(true, "Success");
+        return new ValidationState(true, Constants.successMsg);
     }
 
     private String addErrorText(String err, String msg) {
@@ -138,5 +136,10 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     public void activityTo(Class c){
         Intent intent = new Intent(Registration.this, c);
         startActivity(intent);
+    }
+
+    @Override
+    public String getEndpoint(){
+        return Constants.register;
     }
 }
