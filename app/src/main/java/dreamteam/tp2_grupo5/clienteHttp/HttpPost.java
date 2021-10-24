@@ -26,7 +26,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
 
     private final JSONObject postData;
     private Exception exception;
-    private AsyncInterface caller;
+    private final AsyncInterface caller;
     private int statusCode;
 
     public HttpPost(Map<String, String> postData, Context a) {
@@ -36,13 +36,14 @@ public class HttpPost extends AsyncTask<String, String, String> {
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb = new StringBuilder();
         String line;
         try {
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
+            bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,8 +51,8 @@ public class HttpPost extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected String doInBackground(String ...params) {
-        try{
+    protected String doInBackground(String... params) {
+        try {
             URL url = new URL(params[0]);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -60,43 +61,44 @@ public class HttpPost extends AsyncTask<String, String, String> {
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
 
-            if (this.postData != null) {
-                OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-                writer.write(postData.toString());
-                writer.flush();
-            }
+            OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+            writer.write(postData.toString());
+            writer.flush();
 
+            httpURLConnection.connect();
             statusCode = httpURLConnection.getResponseCode();
             String response;
 
-            if (statusCode ==  200 ) {
+            if (statusCode == HttpURLConnection.HTTP_OK) {
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                 response = convertInputStreamToString(inputStream);
-            }else {
+            } else {
                 response = httpURLConnection.getResponseMessage();
             }
+            writer.close();
+            httpURLConnection.disconnect();
             return response;
-
-        }catch (Exception e){
-            exception=e;
-            Log.d(TAG,e.getLocalizedMessage());
+        } catch (Exception e) {
+            exception = e;
+            Log.d(TAG, e.getLocalizedMessage());
             return null;
         }
 
     }
 
-    protected void onPostExecute(String response){
-        try{
+    protected void onPostExecute(String response) {
+        try {
             super.onPostExecute(response);
-            if( exception != null){
+            Log.i("debug", response);
+            if (exception != null) {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
-            if(statusCode == 200 && caller.getEndpoint().equals(Constants.register)) {
+            if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.register)) {    //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                 caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Registrado corectamente"
                 caller.activityTo(Homepage.class);
                 return;
-            }else if(statusCode == 200 && caller.getEndpoint().equals(Constants.login)){
+            } else if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.login)) {
                 caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Loggeado corectamente"
                 caller.activityTo(Homepage.class);
                 return;
@@ -104,7 +106,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
 
             caller.showToast("Error: " + response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

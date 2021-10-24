@@ -79,7 +79,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
 
         Map<String, String> values = new HashMap<>();
-        values.put("env", Constants.prodEnv);
+        values.put("env", Constants.testEnv);
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);
