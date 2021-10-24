@@ -72,9 +72,12 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
 
 
-        if (!showError.equals(""))
+        if (!showError.equals("")){
             Toast.makeText(Registration.this, showError, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        System.out.println("sigue");
 
         Map<String, String> values = new HashMap<>();
         values.put("env", "TEST");
