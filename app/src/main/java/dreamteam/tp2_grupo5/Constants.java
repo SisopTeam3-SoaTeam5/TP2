@@ -18,7 +18,8 @@ public class Constants {
     public final static String successMsg = "Success";
     public final static String testEnv = "TEST";
     public final static String prodEnv = "PROD";
-    public final static String welcomeMsg = "Welcome!";
+    public final static String successRegister = "Register successfully!";
+    public final static String successLoggin = "Welcome back!";
     public final static String register = "register";
     public final static String login = "login";
     public final static String correctPattern = "You're in :)";

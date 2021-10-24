@@ -4,7 +4,10 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.JsonWriter;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -20,6 +23,7 @@ import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.Homepage;
+import dreamteam.tp2_grupo5.session.Session;
 
 
 public class HttpPost extends AsyncTask<String, String, String> {
@@ -89,18 +93,17 @@ public class HttpPost extends AsyncTask<String, String, String> {
     protected void onPostExecute(String response) {
         try {
             super.onPostExecute(response);
-            Log.i("debug", response);
             if (exception != null) {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
             if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.register)) {    //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Registrado corectamente"
-                caller.activityTo(Homepage.class);
+                caller.showToast(Constants.successRegister);
+                handleLoginAndRegistration(response);
                 return;
             } else if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.login)) {
-                caller.showToast(Constants.welcomeMsg); //Cambiar este msg por "Loggeado corectamente"
-                caller.activityTo(Homepage.class);
+                caller.showToast(Constants.successLoggin);
+                handleLoginAndRegistration(response);
                 return;
             }
 
@@ -109,6 +112,14 @@ public class HttpPost extends AsyncTask<String, String, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Session handleLoginAndRegistration(String response){
+        Gson gson = new Gson();
+        Session session = gson.fromJson(response, Session.class);
+        //lamar al metodo cron
+        caller.activityTo(Homepage.class);
+        return session;
     }
 
 }
