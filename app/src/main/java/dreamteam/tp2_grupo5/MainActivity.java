@@ -3,6 +3,7 @@ package dreamteam.tp2_grupo5;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.andrognito.patternlockview.PatternLockView;
 
@@ -25,4 +26,5 @@ public class MainActivity extends AppCompatActivity {
         patternListener.setContext(MainActivity.this);
         patternLockView.addPatternLockListener(patternListener);
     }
+
 }

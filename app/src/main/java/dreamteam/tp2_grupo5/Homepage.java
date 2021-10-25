@@ -30,7 +30,8 @@ public class Homepage extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
-            SessionManager.logout(Homepage.this);
+            if (SessionManager.logout(this))
+                finish();
             return true;
         }
 

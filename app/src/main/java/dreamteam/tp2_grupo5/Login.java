@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ public class Login extends AppCompatActivity implements AsyncInterface {
         email = findViewById(R.id.editTextTextEmailAddress);
         password = findViewById(R.id.editTextTextPassword);
     }
+
 
     public void onRegistration(View view){
         Intent intent = new Intent(Login.this, Registration.class);
@@ -72,5 +74,10 @@ public class Login extends AppCompatActivity implements AsyncInterface {
     @Override
     public String getEndpoint() {
         return Constants.login;
+    }
+
+    @Override
+    public void finalize() {
+        finish();
     }
 }

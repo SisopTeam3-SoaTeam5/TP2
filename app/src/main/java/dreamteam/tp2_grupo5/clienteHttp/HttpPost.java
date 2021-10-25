@@ -79,6 +79,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
             } else {
                 response = httpURLConnection.getResponseMessage();
             }
+            Log.i("debug", response);
             writer.close();
             httpURLConnection.disconnect();
             return response;
@@ -97,13 +98,12 @@ public class HttpPost extends AsyncTask<String, String, String> {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
-            if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.register)) {    //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                caller.showToast(Constants.successRegister);
+            if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                 handleLoginAndRegistration(response);
-                return;
-            } else if (statusCode == HttpURLConnection.HTTP_OK && caller.getEndpoint().equals(Constants.login)) {
-                caller.showToast(Constants.successLoggin);
-                handleLoginAndRegistration(response);
+                if (caller.getEndpoint().equals(Constants.register))
+                    caller.showToast(Constants.successRegister);
+                else if (caller.getEndpoint().equals(Constants.login))
+                    caller.showToast(Constants.successLoggin);
                 return;
             }
 
@@ -114,7 +114,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
         }
     }
 
-    private void handleLoginAndRegistration(String response){
+    private void handleLoginAndRegistration(String response) {
         Gson gson = new Gson();
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
@@ -122,6 +122,7 @@ public class HttpPost extends AsyncTask<String, String, String> {
         //lamar al metodo cron del manager
         System.out.println("created session: " + SessionManager.token);
         caller.activityTo(Homepage.class);
+        caller.finalize();
     }
 
 }

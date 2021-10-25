@@ -141,4 +141,9 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     public String getEndpoint(){
         return Constants.register;
     }
+
+    @Override
+    public void finalize() {
+        finish();
+    }
 }

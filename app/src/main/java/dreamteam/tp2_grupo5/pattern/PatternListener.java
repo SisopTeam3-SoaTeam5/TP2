@@ -1,5 +1,6 @@
 package dreamteam.tp2_grupo5.pattern;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class PatternListener implements PatternLockViewListener {
             Toast.makeText(context, Constants.correctPattern, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, Login.class);
             context.startActivity(intent);
+            ((Activity)context).finish();
         }else{
             Toast.makeText(context, Constants.wrongPattern, Toast.LENGTH_SHORT).show();
         }

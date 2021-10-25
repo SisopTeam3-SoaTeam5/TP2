@@ -22,11 +22,12 @@ public class SessionManager implements Serializable {
         return !token.isEmpty();
     }
 
-    public static void logout(Context context){
+    public static boolean logout(Context context){
         token="";
         tokenRefresh="";
         Intent intent = new Intent(context, Login.class);
         context.startActivity(intent);
+        return true;
     }
 
 
