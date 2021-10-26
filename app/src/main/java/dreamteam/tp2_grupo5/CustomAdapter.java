@@ -9,15 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+
+import dreamteam.tp2_grupo5.models.RankingItem;
 
 public class CustomAdapter extends RecyclerView.Adapter {
 
-    ArrayList<String> fakeData;
+    HashMap<Integer, RankingItem> stats;
     Context context;
 
-    public CustomAdapter(ArrayList<String> fakeData, Context context) {
-        this.fakeData = fakeData;
+    public CustomAdapter(HashMap<Integer, RankingItem> stats, Context context) {
+        this.stats = stats;
         this.context = context;
     }
 
@@ -31,22 +34,22 @@ public class CustomAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ViewHolder myViewHolder = (ViewHolder) holder;
-        myViewHolder.name.setText(fakeData.get(position));
-
+        myViewHolder.element.setText(Objects.requireNonNull(stats.get(position)).elementString(position));
     }
 
     @Override
     public int getItemCount() {
-        return fakeData.size();
+        return stats.size();
     }
 
     public class ViewHolder  extends  RecyclerView.ViewHolder{
 
-        TextView name;
+        TextView element;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.textView);
+            element = itemView.findViewById(R.id.textView);
         }
+
     }
 }
