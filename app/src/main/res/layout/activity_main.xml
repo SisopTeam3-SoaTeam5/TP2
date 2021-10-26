@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
+    android:foregroundTint="#000000"
+    android:isScrollContainer="false"
     tools:context=".MainActivity">
 
     <com.andrognito.patternlockview.PatternLockView
@@ -17,6 +19,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/batteryBar"
+        android:layout_width="111dp"
+        android:layout_height="91dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="9dp"
+        android:indeterminateOnly="false"
+        android:rotation="90"
+        android:max="100"
+        android:progressDrawable="@drawable/circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/batteryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/batteryBar"
+        app:layout_constraintEnd_toEndOf="@+id/batteryBar"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="@+id/batteryBar"
+        app:layout_constraintTop_toTopOf="@+id/batteryBar"
+        app:layout_constraintVertical_bias="0.45999998" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
