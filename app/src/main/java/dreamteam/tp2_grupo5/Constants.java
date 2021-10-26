@@ -22,6 +22,7 @@ public class Constants {
     public final static String successLoggin = "Welcome back!";
     public final static String register = "register";
     public final static String login = "login";
+    public final static String refresh = "refresh";
     public final static String correctPattern = "You're in :)";
     public final static String wrongPattern = "Wrong :(";
     public final static String virusDataUrl = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";

@@ -87,8 +87,8 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("commission", commissionText);
         values.put("group", groupText);
 
-        HttpPost task = new HttpPost(values, Registration.this);
-        task.execute(Constants.baseUrl + Constants.register);
+        HttpPost task = new HttpPost(values, null,Registration.this);
+        task.execute(Constants.baseUrl + Constants.register,"POST");
     }
 
     private ValidationState validateEmail(String emailText) {

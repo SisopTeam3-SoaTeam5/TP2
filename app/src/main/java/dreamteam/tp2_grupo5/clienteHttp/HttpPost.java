@@ -30,13 +30,17 @@ public class HttpPost extends AsyncTask<String, String, String> {
 
     private final JSONObject postData;
     private Exception exception;
+    Map<String, String> headers;
     private final AsyncInterface caller;
     private int statusCode;
 
-    public HttpPost(Map<String, String> postData, Context a) {
-        this.postData = new JSONObject(postData);
+    public HttpPost(Map<String, String> postData, Map<String, String> headers, Context a) {
+        Log.i("Debug", "Init");
+        this.postData = postData != null ? new JSONObject(postData) : null;
         this.exception = null;
-        this.caller = (AsyncInterface) a;
+        this.headers = headers;
+        this.caller = a != null ? (AsyncInterface) a : null;
+        Log.i("Debug", "End");
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
@@ -60,14 +64,22 @@ public class HttpPost extends AsyncTask<String, String, String> {
             URL url = new URL(params[0]);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            httpURLConnection.setRequestMethod("POST");
+            Log.i("Debug", "arranca");
+            if (headers != null)
+                for (String key : headers.keySet()) {
+                    httpURLConnection.setRequestProperty(key, headers.get(key));
+                }
+            httpURLConnection.setRequestMethod(params[1]);
 
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
 
-            OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-            writer.write(postData.toString());
-            writer.flush();
+            if (postData != null) {
+                OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+                writer.write(postData.toString());
+                writer.flush();
+                writer.close();
+            }
 
             httpURLConnection.connect();
             statusCode = httpURLConnection.getResponseCode();
@@ -79,13 +91,12 @@ public class HttpPost extends AsyncTask<String, String, String> {
             } else {
                 response = httpURLConnection.getResponseMessage();
             }
-            Log.i("debug", response);
-            writer.close();
+            Log.i("Debug", response);
             httpURLConnection.disconnect();
             return response;
         } catch (Exception e) {
             exception = e;
-            Log.d(TAG, e.getLocalizedMessage());
+            Log.i("Debug", e.getLocalizedMessage());
             return null;
         }
 
@@ -94,20 +105,23 @@ public class HttpPost extends AsyncTask<String, String, String> {
     protected void onPostExecute(String response) {
         try {
             super.onPostExecute(response);
-            if (exception != null) {
+            if (exception != null && caller != null) {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
             if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                handleLoginAndRegistration(response);
-                if (caller.getEndpoint().equals(Constants.register))
+                if (caller.getEndpoint().equals(Constants.register)) {
+                    handleLoginAndRegistration(response);
                     caller.showToast(Constants.successRegister);
-                else if (caller.getEndpoint().equals(Constants.login))
+                } else if (caller.getEndpoint().equals(Constants.login)) {
+                    handleLoginAndRegistration(response);
                     caller.showToast(Constants.successLoggin);
+                } else
+                    tokenRefreshed(response);
                 return;
             }
-
-            caller.showToast("Error: " + response);
+            if (caller != null)
+                caller.showToast("Error: " + response);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,10 +133,18 @@ public class HttpPost extends AsyncTask<String, String, String> {
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
         SessionManager.tokenRefresh = sessionMap.tokenRefresh;
-        //lamar al metodo cron del manager
+        SessionManager.setTokenRefreshAlarm((Context) caller);
         System.out.println("created session: " + SessionManager.token);
         caller.activityTo(Homepage.class);
         caller.finalize();
+    }
+
+    private void tokenRefreshed(String response) {
+        Gson gson = new Gson();
+        SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
+        SessionManager.token = sessionMap.token;
+        SessionManager.tokenRefresh = sessionMap.tokenRefresh;
+        Log.i("Debug", "Token refreshed :D");
     }
 
 }

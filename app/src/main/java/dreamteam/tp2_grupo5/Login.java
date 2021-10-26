@@ -54,8 +54,8 @@ public class Login extends AppCompatActivity implements AsyncInterface {
         values.put("email", emailText);
         values.put("password", passwordText);
 
-        HttpPost task = new HttpPost(values, Login.this);
-        task.execute(Constants.baseUrl+Constants.login);
+        HttpPost task = new HttpPost(values, null,Login.this);
+        task.execute(Constants.baseUrl+Constants.login,"POST");
     }
 
 
