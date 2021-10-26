@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +69,13 @@ public class Login extends AppCompatActivity implements AsyncInterface {
     @Override
     public void activityTo(Class c){
         Intent intent = new Intent(Login.this, c);
+        startActivity(intent);
+    }
+
+    @Override
+    public void activityToWithPayload(Class c, Serializable s) {
+        Intent intent = new Intent(Login.this, c);
+        intent.putExtra("payload", s);
         startActivity(intent);
     }
 

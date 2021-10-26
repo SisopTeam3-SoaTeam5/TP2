@@ -22,6 +22,8 @@ public class Constants {
     public final static String successLoggin = "Welcome back!";
     public final static String register = "register";
     public final static String login = "login";
+    public final static String homePage = "homePage";
+    public final static String covidRanking = "covidRanking";
     public final static String refresh = "refresh";
     public final static String correctPattern = "You're in :)";
     public final static String wrongPattern = "Wrong :(";
