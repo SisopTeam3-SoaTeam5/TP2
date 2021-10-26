@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPost;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSesion;
 import dreamteam.tp2_grupo5.states.ValidationState;
 
 public class Registration extends AppCompatActivity implements AsyncInterface {
@@ -87,8 +87,8 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("commission", commissionText);
         values.put("group", groupText);
 
-        HttpPost task = new HttpPost(values, null,Registration.this);
-        task.execute(Constants.baseUrl + Constants.register,"POST");
+        HttpPostStartSesion task = new HttpPostStartSesion(values, Registration.this);
+        task.execute(Constants.baseUrl + Constants.register);
     }
 
     private ValidationState validateEmail(String emailText) {

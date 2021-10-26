@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
-import dreamteam.tp2_grupo5.Registration;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPost;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSesion;
+import dreamteam.tp2_grupo5.clienteHttp.HttpRequest;
 
 public class TokenRefresh extends BroadcastReceiver {
 
@@ -19,7 +19,7 @@ public class TokenRefresh extends BroadcastReceiver {
         Log.i("Debug", "recibido");
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Bearer " + SessionManager.tokenRefresh);
-        HttpPost task = new HttpPost(null, header, null);
+        HttpRequest task = new HttpRequest(null, header);
         task.execute(Constants.baseUrl + Constants.refresh,"PUT");
 
         SessionManager.setTokenRefreshAlarm(context);

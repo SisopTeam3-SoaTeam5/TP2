@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPost;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSesion;
 
 public class Login extends AppCompatActivity implements AsyncInterface {
 
@@ -54,8 +53,8 @@ public class Login extends AppCompatActivity implements AsyncInterface {
         values.put("email", emailText);
         values.put("password", passwordText);
 
-        HttpPost task = new HttpPost(values, null,Login.this);
-        task.execute(Constants.baseUrl+Constants.login,"POST");
+        HttpPostStartSesion task = new HttpPostStartSesion(values, Login.this);
+        task.execute(Constants.baseUrl+Constants.login);
     }
 
 

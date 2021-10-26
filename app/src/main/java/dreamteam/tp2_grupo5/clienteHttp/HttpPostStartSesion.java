@@ -26,20 +26,18 @@ import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.session.SessionMapper;
 
 
-public class HttpPost extends AsyncTask<String, String, String> {
+public class HttpPostStartSesion extends AsyncTask<String, String, String> {
 
     private final JSONObject postData;
     private Exception exception;
-    Map<String, String> headers;
     private final AsyncInterface caller;
     private int statusCode;
 
-    public HttpPost(Map<String, String> postData, Map<String, String> headers, Context a) {
+    public HttpPostStartSesion(Map<String, String> postData, Context a) {
         Log.i("Debug", "Init");
-        this.postData = postData != null ? new JSONObject(postData) : null;
+        this.postData = new JSONObject(postData);
         this.exception = null;
-        this.headers = headers;
-        this.caller = a != null ? (AsyncInterface) a : null;
+        this.caller = (AsyncInterface) a;
         Log.i("Debug", "End");
     }
 
@@ -65,21 +63,15 @@ public class HttpPost extends AsyncTask<String, String, String> {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
             Log.i("Debug", "arranca");
-            if (headers != null)
-                for (String key : headers.keySet()) {
-                    httpURLConnection.setRequestProperty(key, headers.get(key));
-                }
-            httpURLConnection.setRequestMethod(params[1]);
+            httpURLConnection.setRequestMethod("POST");
 
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
 
-            if (postData != null) {
-                OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-                writer.write(postData.toString());
-                writer.flush();
-                writer.close();
-            }
+            OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+            writer.write(postData.toString());
+            writer.flush();
+            writer.close();
 
             httpURLConnection.connect();
             statusCode = httpURLConnection.getResponseCode();
@@ -105,23 +97,19 @@ public class HttpPost extends AsyncTask<String, String, String> {
     protected void onPostExecute(String response) {
         try {
             super.onPostExecute(response);
-            if (exception != null && caller != null) {
+            if (exception != null) {
                 caller.showToast("Error: " + exception.toString());
                 return;
             }
             if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                if (caller.getEndpoint().equals(Constants.register)) {
-                    handleLoginAndRegistration(response);
+                handleLoginAndRegistration(response);
+                if (caller.getEndpoint().equals(Constants.register))
                     caller.showToast(Constants.successRegister);
-                } else if (caller.getEndpoint().equals(Constants.login)) {
-                    handleLoginAndRegistration(response);
+                else if (caller.getEndpoint().equals(Constants.login))
                     caller.showToast(Constants.successLoggin);
-                } else
-                    tokenRefreshed(response);
                 return;
             }
-            if (caller != null)
-                caller.showToast("Error: " + response);
+            caller.showToast("Error: " + response);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,12 +127,5 @@ public class HttpPost extends AsyncTask<String, String, String> {
         caller.finalize();
     }
 
-    private void tokenRefreshed(String response) {
-        Gson gson = new Gson();
-        SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
-        SessionManager.token = sessionMap.token;
-        SessionManager.tokenRefresh = sessionMap.tokenRefresh;
-        Log.i("Debug", "Token refreshed :D");
-    }
 
 }
