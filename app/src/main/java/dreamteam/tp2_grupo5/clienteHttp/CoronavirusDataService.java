@@ -88,7 +88,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     @Override
     protected void onPostExecute(HashMap<String, Integer> result) {
         super.onPostExecute(result);
-        HashMap<Integer, RankingItem> sortedStats = sortStats(result,"");
+        HashMap<Integer, RankingItem> sortedStats = sortStats(result);
         System.out.println("sortedStats: " + sortedStats);
         caller.activityToWithPayload(CovidRanking.class, sortedStats);
     }
@@ -104,7 +104,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
         return result;
     }
 
-    private HashMap<Integer, RankingItem> sortStats(HashMap<String, Integer> unSortedStats, String order) { //Falta implemenar el ascendente
+    private HashMap<Integer, RankingItem> sortStats(HashMap<String, Integer> unSortedStats) { //Falta implemenar el ascendente
         HashMap<Integer, RankingItem> sortedMap = new HashMap<>();
         integer = 0;
         unSortedStats.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> {
