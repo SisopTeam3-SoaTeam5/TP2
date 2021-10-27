@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     SensorManager sensor;
     ProgressDialog nDialog;
     boolean desc = true;
+    CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,16 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView = findViewById(R.id.RecycleView);
         recyclerView.setLayoutManager(manager);
-        setAdapter();
+        customAdapter = new CustomAdapter(stats, this);
+//        customAdapter.registerAdapterDataObserver(new DataSetObserver(){
+//            @Override
+//            public void onChanged(){
+//                super.onChanged();
+//            }
+//        });
+        recyclerView.setAdapter(customAdapter);
         sensor = (SensorManager) getSystemService(SENSOR_SERVICE);
         registerSenser();
-        setProgressBar();
     }
 
     @Override
@@ -53,13 +62,13 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onPause() {
-        unregisterSenser();
+      //  unregisterSenser();
         super.onPause();
     }
                             //Considerar usar una bandera en vez de onPause y onResume
     @Override
     protected void onResume() {
-        registerSenser();
+       // registerSenser();
         super.onResume();
     }
 
@@ -74,9 +83,9 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
             if ((Math.abs(values[0]) > Constants.ACC || Math.abs(values[1]) > Constants.ACC || Math.abs(values[2]) > Constants.ACC))
             {
                 Log.i("sensor", "running");
-                nDialog.show();
-                setAdapter();
-                nDialog.dismiss();
+                reSortRanking();
+                Log.i("stats","re ordenando");
+                customAdapter.notifyDataSetChanged();
             }
         }
 
@@ -106,35 +115,21 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         Log.i("sensor", "unregister");
     }
 
-    private void setAdapter(){
-        if( stats != null ){
-            reSortRanking();
-        }
-        CustomAdapter customAdapter = new CustomAdapter(stats, this);
-        recyclerView.setAdapter(customAdapter);
-    }
-
-    private void setProgressBar(){
-        nDialog = new ProgressDialog(CovidRanking.this);
-        nDialog.setMessage("Loading..");
-        nDialog.setTitle("Get Data");
-        nDialog.setIndeterminate(false);
-        nDialog.setCancelable(true);
-    }
-
     private void reSortRanking(){
         ArrayList<RankingItem> values = new ArrayList<>(stats.values());
+        int max = values.size()-1;
+        stats.clear();
         if(desc){
             values.sort(new RankingItemComparator());
                 HashMap<Integer,RankingItem> newStats = new HashMap<>();
-                Integer i = values.size() - 1;
+                Integer i = 0;
 
                 for (RankingItem item : values) {
                     newStats.put(i,item);
-                    i--;
+                    i++;
                 }
 
-                stats = newStats;
+                stats.putAll(newStats);
             }else {
 
             values.sort(new RankingItemComparator().reversed());
@@ -146,8 +141,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
                     i++;
                 }
 
-                stats = newStats;
-
+                stats.putAll(newStats);
             }
             desc = !desc;
         }

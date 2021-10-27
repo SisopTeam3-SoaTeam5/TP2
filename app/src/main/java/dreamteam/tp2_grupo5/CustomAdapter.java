@@ -1,6 +1,7 @@
 package dreamteam.tp2_grupo5;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return stats.size();
     }
+
 
     public class ViewHolder  extends  RecyclerView.ViewHolder{
 
