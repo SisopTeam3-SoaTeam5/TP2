@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -42,8 +43,7 @@ public class SessionManager implements Serializable {
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
             alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
-        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
-        Log.i("Debug", "Alarma Registada");
+        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
     }
 
     public static void cancelAlarmRefreshToken() {

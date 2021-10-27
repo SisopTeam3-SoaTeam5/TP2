@@ -16,7 +16,6 @@ public class TokenRefresh extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("Debug", "recibido");
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", "Bearer " + SessionManager.tokenRefresh);
         HttpRequest task = new HttpRequest(null, header);

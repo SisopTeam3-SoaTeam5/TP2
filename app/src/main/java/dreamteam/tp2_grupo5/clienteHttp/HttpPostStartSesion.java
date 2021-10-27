@@ -34,11 +34,9 @@ public class HttpPostStartSesion extends AsyncTask<String, String, String> {
     private int statusCode;
 
     public HttpPostStartSesion(Map<String, String> postData, Context a) {
-        Log.i("Debug", "Init");
         this.postData = new JSONObject(postData);
         this.exception = null;
         this.caller = (AsyncInterface) a;
-        Log.i("Debug", "End");
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
@@ -62,7 +60,6 @@ public class HttpPostStartSesion extends AsyncTask<String, String, String> {
             URL url = new URL(params[0]);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            Log.i("Debug", "arranca");
             httpURLConnection.setRequestMethod("POST");
 
             httpURLConnection.setDoInput(true);
@@ -83,7 +80,6 @@ public class HttpPostStartSesion extends AsyncTask<String, String, String> {
             } else {
                 response = httpURLConnection.getResponseMessage();
             }
-            Log.i("Debug", response);
             httpURLConnection.disconnect();
             return response;
         } catch (Exception e) {

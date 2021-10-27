@@ -56,7 +56,6 @@ public class HttpRequest extends AsyncTask<String, String, String> {
             URL url = new URL(params[0]);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
-            Log.i("Debug", "arranca");
             if (headers != null)
                 for (String key : headers.keySet()) {
                     httpURLConnection.setRequestProperty(key, headers.get(key));
@@ -83,7 +82,6 @@ public class HttpRequest extends AsyncTask<String, String, String> {
             } else {
                 response = httpURLConnection.getResponseMessage();
             }
-            Log.i("Debug", response);
             httpURLConnection.disconnect();
             return response;
         } catch (Exception e) {
