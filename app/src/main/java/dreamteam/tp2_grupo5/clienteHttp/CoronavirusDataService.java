@@ -26,6 +26,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     HashMap<String, Integer> covidStats = new HashMap<String, Integer>();
     private final AsyncInterface caller;
     Integer integer;
+    private boolean isConnected;
 
     public CoronavirusDataService(Context caller) {
         this.caller = (AsyncInterface) caller;
@@ -69,7 +70,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
 
                 }
             }
-            else { //Analizar que hacer aca
+            else {
                 return null;
             }
 
@@ -81,16 +82,28 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     }
 
     @Override
+    protected void onPreExecute() {
+        isConnected = caller.getConnection();
+    }
+
+    @Override
     protected HashMap<String, Integer> doInBackground(String... params) {
-        return fetchVirusData(params[0]);
+        if(isConnected)
+            return fetchVirusData(params[0]);
+        return null;
     }
 
     @Override
     protected void onPostExecute(HashMap<String, Integer> result) {
-        super.onPostExecute(result);
-        HashMap<Integer, RankingItem> sortedStats = sortStats(result);
-        System.out.println("sortedStats: " + sortedStats);
-        caller.activityToWithPayload(CovidRanking.class, sortedStats);
+        if(isConnected) {
+            super.onPostExecute(result);
+            HashMap<Integer, RankingItem> sortedStats = sortStats(result);
+            System.out.println("sortedStats: " + sortedStats);
+            caller.activityToWithPayload(CovidRanking.class, sortedStats);
+        }else {
+            caller.showToast("No internet connection" + System.lineSeparator() +
+                    "Try again later");
+        }
     }
 
     private StringBuilder convertInputStreamToString(InputStreamReader inputStream) throws IOException, IOException {
@@ -113,5 +126,6 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
         });
         return sortedMap;
     }
+
 
 }

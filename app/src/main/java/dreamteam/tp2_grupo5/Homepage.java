@@ -3,8 +3,11 @@ package dreamteam.tp2_grupo5;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,13 +16,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.CoronavirusDataService;
-import dreamteam.tp2_grupo5.models.RankingItem;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.session.TokenRefresh;
 
@@ -89,6 +88,15 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     @Override
     public void finalize() {
         finish();
+    }
+
+    @Override
+    public boolean getConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return  activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 }

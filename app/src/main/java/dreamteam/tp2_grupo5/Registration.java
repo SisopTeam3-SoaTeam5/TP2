@@ -2,7 +2,10 @@ package dreamteam.tp2_grupo5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -14,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSesion;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
 import dreamteam.tp2_grupo5.states.ValidationState;
 
 public class Registration extends AppCompatActivity implements AsyncInterface {
@@ -88,7 +91,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
         values.put("commission", commissionText);
         values.put("group", groupText);
 
-        HttpPostStartSesion task = new HttpPostStartSesion(values, Registration.this);
+        HttpPostStartSession task = new HttpPostStartSession(values, Registration.this);
         task.execute(Constants.baseUrl + Constants.register);
     }
 
@@ -153,5 +156,14 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     @Override
     public void finalize() {
         finish();
+    }
+
+    @Override
+    public boolean getConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

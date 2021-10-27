@@ -8,4 +8,5 @@ public interface AsyncInterface {
     void activityToWithPayload(Class c, Serializable s);
     String getEndpoint();
     void finalize();
+    boolean getConnection();
 }

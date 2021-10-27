@@ -1,6 +1,10 @@
 package dreamteam.tp2_grupo5.clienteHttp;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,23 +22,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import dreamteam.tp2_grupo5.Constants;
+import dreamteam.tp2_grupo5.Homepage;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.session.SessionMapper;
 
-public class HttpRequest extends AsyncTask<String, String, String> {
+
+public class HttpPostStartSession extends AsyncTask<String, String, String> {
 
     private final JSONObject postData;
     private Exception exception;
-    Map<String, String> headers;
-    private int statusCode;
-    private boolean isConnected;
     private final AsyncInterface caller;
+    private int statusCode;
+    boolean isConnected;
 
-    public HttpRequest(Map<String, String> postData, Map<String, String> headers, Context caller) {
-        this.postData = postData != null ? new JSONObject(postData) : null;
-        this.caller = (AsyncInterface) caller;
+    public HttpPostStartSession(Map<String, String> postData, Context a) {
+        this.postData = new JSONObject(postData);
         this.exception = null;
-        this.headers = headers;
+        this.caller = (AsyncInterface) a;
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
@@ -64,21 +69,15 @@ public class HttpRequest extends AsyncTask<String, String, String> {
                 URL url = new URL(params[0]);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                if (headers != null)
-                    for (String key : headers.keySet()) {
-                        httpURLConnection.setRequestProperty(key, headers.get(key));
-                    }
-                httpURLConnection.setRequestMethod(params[1]);
+                httpURLConnection.setRequestMethod("POST");
 
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.setDoOutput(true);
 
-                if (postData != null) {
-                    OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-                    writer.write(postData.toString());
-                    writer.flush();
-                    writer.close();
-                }
+                OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+                writer.write(postData.toString());
+                writer.flush();
+                writer.close();
 
                 httpURLConnection.connect();
                 statusCode = httpURLConnection.getResponseCode();
@@ -101,32 +100,44 @@ public class HttpRequest extends AsyncTask<String, String, String> {
         return null;
     }
 
+
     protected void onPostExecute(String response) {
         if(isConnected) {
             try {
                 super.onPostExecute(response);
                 if (exception != null) {
-                    Log.i("Debug", exception.toString());
+                    caller.showToast("Error: " + exception.toString());
                     return;
                 }
                 if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                    tokenRefreshed(response);
+                    handleLoginAndRegistration(response);
+                    if (caller.getEndpoint().equals(Constants.register))
+                        caller.showToast(Constants.successRegister);
+                    else if (caller.getEndpoint().equals(Constants.login))
+                        caller.showToast(Constants.successLoggin);
                     return;
                 }
+                caller.showToast("Error: " + response);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        }else {
             caller.showToast("No internet connection" + System.lineSeparator() +
-                    "Try again later");
+                                     "Try again later");
         }
     }
 
-    private void tokenRefreshed(String response) {
+    private void handleLoginAndRegistration(String response) {
         Gson gson = new Gson();
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
         SessionManager.tokenRefresh = sessionMap.tokenRefresh;
-        Log.i("Debug", "Token refreshed :D");
+        SessionManager.setTokenRefreshAlarm((Context) caller);
+        System.out.println("created session: " + SessionManager.token);
+        caller.activityTo(Homepage.class);
+        caller.finalize();
     }
+
+
 }

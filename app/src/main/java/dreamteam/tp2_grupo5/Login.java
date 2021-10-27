@@ -2,7 +2,10 @@ package dreamteam.tp2_grupo5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -14,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSesion;
+import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
 
 public class Login extends AppCompatActivity implements AsyncInterface {
 
@@ -54,7 +57,7 @@ public class Login extends AppCompatActivity implements AsyncInterface {
         values.put("email", emailText);
         values.put("password", passwordText);
 
-        HttpPostStartSesion task = new HttpPostStartSesion(values, Login.this);
+        HttpPostStartSession task = new HttpPostStartSession(values, Login.this);
         task.execute(Constants.baseUrl+Constants.login);
     }
 
@@ -87,4 +90,14 @@ public class Login extends AppCompatActivity implements AsyncInterface {
     public void finalize() {
         finish();
     }
+
+    @Override
+    public boolean getConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+
 }
