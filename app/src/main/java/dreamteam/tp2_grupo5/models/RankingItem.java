@@ -1,6 +1,7 @@
 package dreamteam.tp2_grupo5.models;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class RankingItem implements Serializable {
     private String country;
@@ -19,6 +20,8 @@ public class RankingItem implements Serializable {
         return position + " - " + country + " - " + totalCases.toString();
     }
 
+
+
     public void setCountry(String country) {
         this.country = country;
     }
@@ -30,4 +33,5 @@ public class RankingItem implements Serializable {
     public void setTotalCases(Integer totalCases) {
         this.totalCases = totalCases;
     }
+
 }
