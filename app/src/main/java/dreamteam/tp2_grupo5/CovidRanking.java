@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,9 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
@@ -31,6 +29,8 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     ProgressDialog nDialog;
     boolean desc = true;
     CustomAdapter customAdapter;
+    float maxLightValue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,45 +50,60 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 //        });
         recyclerView.setAdapter(customAdapter);
         sensor = (SensorManager) getSystemService(SENSOR_SERVICE);
-        registerSenser();
+        registerSensor(Sensor.TYPE_ACCELEROMETER);
+        registerSensor(Sensor.TYPE_LIGHT);
     }
 
     @Override
-    protected void onStop()
-    {
-        unregisterSenser();
+    protected void onStop() {
+        unregisterSensor();
         super.onStop();
     }
 
     @Override
     protected void onPause() {
-      //  unregisterSenser();
+        //  unregisterSensor();
         super.onPause();
     }
-                            //Considerar usar una bandera en vez de onPause y onResume
+
+    //Considerar usar una bandera en vez de onPause y onResume
     @Override
     protected void onResume() {
-       // registerSenser();
+        // registerSensor();
         super.onResume();
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        int sensorType = event.sensor.getType();
+        synchronized (this) {
 
-        float[] values = event.values;
+            int sensorType = event.sensor.getType();
 
-        if (sensorType == Sensor.TYPE_ACCELEROMETER)
-        {
-            if ((Math.abs(values[0]) > Constants.ACC || Math.abs(values[1]) > Constants.ACC || Math.abs(values[2]) > Constants.ACC))
-            {
-                Log.i("sensor", "running");
-                reSortRanking();
-                Log.i("stats","re ordenando");
-                customAdapter.notifyDataSetChanged();
+            float[] values = event.values;
+
+            if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+                if ((Math.abs(values[0]) > Constants.ACC || Math.abs(values[1]) > Constants.ACC || Math.abs(values[2]) > Constants.ACC)) {
+                    Log.i("sensor", "running");
+                    reSortRanking();
+                    Log.i("stats", "re ordenando");
+                    customAdapter.notifyDataSetChanged();
+                }
+            } else if (sensorType == Sensor.TYPE_LIGHT) {
+                Log.i("sensor", values[0] + "");
+                changeBackgroundColor(values[0]);
             }
         }
 
+    }
+
+    private void changeBackgroundColor(float color) {
+        float scaledColor = 255 * color / maxLightValue;
+        String hexColor = Integer.toHexString((int) scaledColor);
+        if (hexColor.length() == 1)
+            hexColor += hexColor;         //transforma, por ejemplo, F en FF. parseColor requiere 6 caracteres;
+        hexColor = "#" + hexColor + hexColor + hexColor;
+        recyclerView.setBackgroundColor(Color.parseColor(hexColor));
+        customAdapter.changeTextColor(255 - (int) scaledColor);
     }
 
     @Override
@@ -96,54 +111,59 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
     }
 
-    private void registerSenser()
-    {
+    private void registerSensor(int sens) {
         boolean done;
-        done = sensor.registerListener(this, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        Sensor selectedSensor = sensor.getDefaultSensor(sens);
+        done = sensor.registerListener(this, selectedSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        if (!done)
-        {
-            Toast.makeText(this, "tristelme no tenes este sensor", Toast.LENGTH_SHORT).show();
+        String sensName;
+        if (sens == Sensor.TYPE_ACCELEROMETER)
+            sensName = "ACELERÓMETRO";
+        else {
+            maxLightValue = selectedSensor.getMaximumRange();
+            sensName = "Sensor de Luz";
         }
+        if (!done)
+            Toast.makeText(this, "tristelme no tenes este sensor: " + sensName, Toast.LENGTH_SHORT).show();
+
 
         Log.i("sensor", "register");
     }
 
-    private void unregisterSenser()
-    {
+    private void unregisterSensor() {
         sensor.unregisterListener(this);
         Log.i("sensor", "unregister");
     }
 
-    private void reSortRanking(){
+    private void reSortRanking() {
         ArrayList<RankingItem> values = new ArrayList<>(stats.values());
-        int max = values.size()-1;
+        int max = values.size() - 1;
         stats.clear();
-        if(desc){
+        if (desc) {
             values.sort(new RankingItemComparator());
-                HashMap<Integer,RankingItem> newStats = new HashMap<>();
-                Integer i = 0;
+            HashMap<Integer, RankingItem> newStats = new HashMap<>();
+            Integer i = 0;
 
-                for (RankingItem item : values) {
-                    newStats.put(i,item);
-                    i++;
-                }
+            for (RankingItem item : values) {
+                newStats.put(i, item);
+                i++;
+            }
 
-                stats.putAll(newStats);
-            }else {
+            stats.putAll(newStats);
+        } else {
 
             values.sort(new RankingItemComparator().reversed());
-                HashMap<Integer,RankingItem> newStats = new HashMap<>();
-                Integer i = 0;
+            HashMap<Integer, RankingItem> newStats = new HashMap<>();
+            Integer i = 0;
 
-                for (RankingItem item : values) {
-                    newStats.put(i,item);
-                    i++;
-                }
-
-                stats.putAll(newStats);
+            for (RankingItem item : values) {
+                newStats.put(i, item);
+                i++;
             }
-            desc = !desc;
+
+            stats.putAll(newStats);
         }
+        desc = !desc;
     }
+}
 
