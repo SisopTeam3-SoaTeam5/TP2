@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,11 +19,13 @@ import java.util.Map;
 
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
+import dreamteam.tp2_grupo5.clienteHttp.MetricsInterface;
 
-public class Login extends AppCompatActivity implements AsyncInterface {
+public class Login extends AppCompatActivity implements AsyncInterface, MetricsInterface {
 
     EditText email;
     EditText password;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class Login extends AppCompatActivity implements AsyncInterface {
         setContentView(R.layout.activity_login);
         email = findViewById(R.id.editTextTextEmailAddress);
         password = findViewById(R.id.editTextTextPassword);
+        sharedPreferences = getSharedPreferences("Login",Context.MODE_PRIVATE);
     }
 
 
@@ -100,4 +104,15 @@ public class Login extends AppCompatActivity implements AsyncInterface {
     }
 
 
+    @Override
+    public void writePreferences(String key, Integer value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
+    }
+
+    @Override
+    public Integer getPreferences(String key) {
+        return sharedPreferences.getInt(key, 0);
+    }
 }

@@ -1,10 +1,6 @@
 package dreamteam.tp2_grupo5.clienteHttp;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -20,6 +16,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
@@ -33,13 +31,17 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
     private final JSONObject postData;
     private Exception exception;
     private final AsyncInterface caller;
+    private final MetricsInterface metrics;
     private int statusCode;
     boolean isConnected;
+    Calendar calendar;
 
     public HttpPostStartSession(Map<String, String> postData, Context a) {
         this.postData = new JSONObject(postData);
         this.exception = null;
         this.caller = (AsyncInterface) a;
+        this.metrics = (MetricsInterface) a;
+        this.calendar = Calendar.getInstance();
     }
 
     private String convertInputStreamToString(InputStream inputStream) {
@@ -111,10 +113,26 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                 }
                 if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                     handleLoginAndRegistration(response);
-                    if (caller.getEndpoint().equals(Constants.register))
+                    if (caller.getEndpoint().equals(Constants.register)){
                         caller.showToast(Constants.successRegister);
-                    else if (caller.getEndpoint().equals(Constants.login))
+                    }
+                    else if (caller.getEndpoint().equals(Constants.login)){
                         caller.showToast(Constants.successLoggin);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        String key = "";
+                        if(hour < 12){
+                            key = "M";
+                        }else{
+                            key = "T";
+                        }
+                        Integer value = metrics.getPreferences(key);
+                        if(value == 0){
+                            value = 1;
+                        }else{
+                            value++;
+                        }
+                        metrics.writePreferences(key,value);
+                    }
                     return;
                 }
                 caller.showToast("Error: " + response);
