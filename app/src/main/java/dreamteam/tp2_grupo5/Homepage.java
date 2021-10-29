@@ -62,6 +62,18 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
         task.execute(Constants.virusDataUrl);
     }
 
+    public void onLoginMetricsHandler(View view){
+        Intent intent = new Intent(Homepage.this, MetricsViewer.class);
+        intent.putExtra("metric","Login");
+        startActivity(intent);
+    }
+
+    public void onShakeMetricsHandler(View view){
+        Intent intent = new Intent(Homepage.this, MetricsViewer.class);
+        intent.putExtra("metric","Shake");
+        startActivity(intent);
+    }
+
     @Override
     public void showToast(String msg) {
         Toast.makeText(Homepage.this, msg, Toast.LENGTH_SHORT).show();
