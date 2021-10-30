@@ -59,7 +59,7 @@ public class HttpRequest extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        if(isConnected) {
+        if (isConnected) {
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -84,7 +84,7 @@ public class HttpRequest extends AsyncTask<String, String, String> {
                 statusCode = httpURLConnection.getResponseCode();
                 String response;
 
-                if (statusCode == HttpURLConnection.HTTP_OK) {
+                if (statusCode == HttpURLConnection.HTTP_OK || statusCode == HttpURLConnection.HTTP_CREATED) {
                     InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                     response = convertInputStreamToString(inputStream);
                 } else {
@@ -102,27 +102,32 @@ public class HttpRequest extends AsyncTask<String, String, String> {
     }
 
     protected void onPostExecute(String response) {
-        if(isConnected) {
+        System.out.println(response);
+        if (isConnected) {
             try {
                 super.onPostExecute(response);
                 if (exception != null) {
                     Log.i("Debug", exception.toString());
                     return;
                 }
-                if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                    tokenRefreshed(response);
-                    return;
+                if (postData == null) {   //si postData es null se refrescó el token
+                    if (statusCode == HttpURLConnection.HTTP_OK)
+                        tokenRefreshed(response);                                       //de lo contrario se registró evento
+                } else  if(statusCode == HttpURLConnection.HTTP_OK || statusCode == HttpURLConnection.HTTP_CREATED){
+                        Log.i("Debug",response);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
-            caller.showToast("No internet connection" + System.lineSeparator() +
-                    "Try again later");
+        } else {
+            caller.showToast("Session expired" + System.lineSeparator() +
+                    "No internet connection");
+            SessionManager.logout((Context)caller);
         }
     }
 
     private void tokenRefreshed(String response) {
+        SessionManager.registerEvent((Context) caller,"Token refreshed", "The user token was refreshed");
         Gson gson = new Gson();
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;

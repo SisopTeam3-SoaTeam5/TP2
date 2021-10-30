@@ -27,9 +27,13 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent=getIntent();
+        Bundle params=intent.getExtras();
+        SessionManager.registerEvent(this, params.getString("event"), params.getString("description"));
+        SessionManager.setTokenRefreshAlarm(this);
         setContentView(R.layout.activity_homepage);
         //registro receiver para alarma refresh token
-        registerReceiver(new TokenRefresh(),new IntentFilter("com.token.refresh"));
+        registerReceiver(new TokenRefresh(), new IntentFilter("com.token.refresh"));
     }
 
     @Override
@@ -50,27 +54,25 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             if (SessionManager.logout(this))
-                finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCovidRankingHandler(View view){
+    public void onCovidRankingHandler(View view) {
         CoronavirusDataService task = new CoronavirusDataService(Homepage.this);
         task.execute(Constants.virusDataUrl);
     }
 
-    public void onLoginMetricsHandler(View view){
+    public void onLoginMetricsHandler(View view) {
         Intent intent = new Intent(Homepage.this, MetricsViewer.class);
-        intent.putExtra("metric","Login");
+        intent.putExtra("metric", "Login");
         startActivity(intent);
     }
 
-    public void onShakeMetricsHandler(View view){
+    public void onShakeMetricsHandler(View view) {
         Intent intent = new Intent(Homepage.this, MetricsViewer.class);
-        intent.putExtra("metric","Shake");
+        intent.putExtra("metric", "Shake");
         startActivity(intent);
     }
 
@@ -80,7 +82,7 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     }
 
     @Override
-    public void activityTo(Class c){
+    public void activityTo(Class c) {
         Intent intent = new Intent(Homepage.this, c);
         startActivity(intent);
     }
@@ -105,10 +107,10 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     @Override
     public boolean getConnection() {
         ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return  activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
 }

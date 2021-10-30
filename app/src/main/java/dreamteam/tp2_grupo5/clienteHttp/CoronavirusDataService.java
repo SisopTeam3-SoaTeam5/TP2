@@ -19,6 +19,7 @@ import java.util.Map;
 import dreamteam.tp2_grupo5.CovidRanking;
 import dreamteam.tp2_grupo5.models.LocationStats;
 import dreamteam.tp2_grupo5.models.RankingItem;
+import dreamteam.tp2_grupo5.session.SessionManager;
 
 public class CoronavirusDataService extends AsyncTask<String, String, HashMap<String, Integer>> {
 
@@ -32,7 +33,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
         this.caller = (AsyncInterface) caller;
     }
 
-    public HashMap<String, Integer> fetchVirusData(String uri){
+    public HashMap<String, Integer> fetchVirusData(String uri) {
         HttpURLConnection urlConnection = null;
         try {
             String result = null;
@@ -59,23 +60,22 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
                     LocationStats locationStats = new LocationStats();
 
                     locationStats.setCountry(record.get("Country/Region"));
-                    locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size()-1)));
+                    locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size() - 1)));
 
                     Integer prev = stats.get(locationStats.getCountry());
                     Integer newValue = locationStats.getLatestTotalCases();
-                    if(prev != null)
+                    if (prev != null)
                         newValue += prev.intValue();
 
                     stats.put(locationStats.getCountry(), newValue);
 
                 }
-            }
-            else {
+            } else {
                 return null;
             }
 
             return stats;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -88,19 +88,20 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
 
     @Override
     protected HashMap<String, Integer> doInBackground(String... params) {
-        if(isConnected)
+        if (isConnected)
             return fetchVirusData(params[0]);
         return null;
     }
 
     @Override
     protected void onPostExecute(HashMap<String, Integer> result) {
-        if(isConnected) {
+        if (isConnected) {
             super.onPostExecute(result);
+            SessionManager.registerEvent((Context) caller, "CovidRanking", "The user obtained the covid ranking");
             HashMap<Integer, RankingItem> sortedStats = sortStats(result);
             System.out.println("sortedStats: " + sortedStats);
             caller.activityToWithPayload(CovidRanking.class, sortedStats);
-        }else {
+        } else {
             caller.showToast("No internet connection" + System.lineSeparator() +
                     "Try again later");
         }
@@ -121,7 +122,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
         HashMap<Integer, RankingItem> sortedMap = new HashMap<>();
         integer = 0;
         unSortedStats.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> {
-            sortedMap.put(integer, new RankingItem(x.getKey(),x.getValue()));
+            sortedMap.put(integer, new RankingItem(x.getKey(), x.getValue()));
             integer++;
         });
         return sortedMap;

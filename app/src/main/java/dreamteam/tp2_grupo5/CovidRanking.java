@@ -13,17 +13,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
 import dreamteam.tp2_grupo5.models.RankingItem;
+import dreamteam.tp2_grupo5.session.SessionManager;
 
-public class CovidRanking extends AppCompatActivity implements SensorEventListener {
+public class CovidRanking extends AppCompatActivity implements SensorEventListener, AsyncInterface {
 
     RecyclerView recyclerView;
     HashMap<Integer, RankingItem> stats;
@@ -32,6 +37,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     CustomAdapter customAdapter;
     float maxLightValue;
     SharedPreferences sharedPreferences;
+    float previousColor = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +88,9 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
                     reSortRanking();
                     Log.i("stats", "re ordenando");
                     customAdapter.notifyDataSetChanged();
+                    SessionManager.registerEvent(this, "Shake", "User re-ordered covid ranking");
                 }
             } else if (sensorType == Sensor.TYPE_LIGHT) {
-                Log.i("sensor", values[0] + "");
                 changeBackgroundColor(values[0]);
             }
         }
@@ -92,13 +98,25 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     }
 
     private void changeBackgroundColor(float color) {
+        registerLightEvent(color);
+        previousColor=color;
         float scaledColor = 255 * color / maxLightValue;
         String hexColor = Integer.toHexString((int) scaledColor);
         if (hexColor.length() == 1)
-            hexColor += hexColor;         //transforma, por ejemplo, F en FF. parseColor requiere 6 caracteres;
+            hexColor = '0'+hexColor;         //transforma, por ejemplo, F en 0F. parseColor requiere 6 caracteres;
         hexColor = "#" + hexColor + hexColor + hexColor;
+        Log.i("Debug",hexColor);
         recyclerView.setBackgroundColor(Color.parseColor(hexColor));
-        customAdapter.changeTextColor(255 - (int) scaledColor);
+    }
+
+    private void registerLightEvent(float color){
+        float mitad=maxLightValue/2;
+        if (previousColor >= 0) {
+            if (previousColor <= mitad && color > mitad)
+                SessionManager.registerEvent(this,"High light","The light read by the sensor went from the lower half to the upper half of the sensor");
+            else if(color <= mitad && previousColor > mitad)
+                SessionManager.registerEvent(this,"Low light","the light read by the sensor went from the upper to the lower half of the sensor");
+        }
     }
 
     @Override
@@ -177,5 +195,38 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         return sharedPreferences.getInt(key, 0);
     }
 
+    @Override
+    public void showToast(String msg) {
+
+    }
+
+    @Override
+    public void activityTo(Class c) {
+
+    }
+
+    @Override
+    public void activityToWithPayload(Class c, Serializable s) {
+
+    }
+
+    @Override
+    public String getEndpoint() {
+        return null;
+    }
+
+    @Override
+    public void finalize() {
+
+    }
+
+    @Override
+    public boolean getConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
 }
 

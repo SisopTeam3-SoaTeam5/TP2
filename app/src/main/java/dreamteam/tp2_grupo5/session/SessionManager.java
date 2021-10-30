@@ -1,16 +1,21 @@
 package dreamteam.tp2_grupo5.session;
 
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.util.Log;
+
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.Login;
+import dreamteam.tp2_grupo5.clienteHttp.HttpRequest;
 
 public class SessionManager implements Serializable {
 
@@ -32,10 +37,24 @@ public class SessionManager implements Serializable {
         token = "";
         tokenRefresh = "";
         Intent intent = new Intent(context, Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP        //Cierra todas las actividades abiertas
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
+        ((Activity)context).finish();
         return true;
     }
 
+    public static void registerEvent(Context context, String evento, String description) {
+        Map<String, String> header = new HashMap<>();
+        Map<String, String> values = new HashMap<>();
+        header.put("Authorization", "Bearer " + SessionManager.tokenRefresh);
+        values.put("env", Constants.testEnv);
+        values.put("type_events", evento);
+        values.put("description", description);
+        HttpRequest task = new HttpRequest(values, header, context);
+        task.execute(Constants.baseUrl + Constants.regEvent, "POST");
+    }
 
     public static void setTokenRefreshAlarm(Context context) {
         if (alarmIntent == null) {
@@ -43,7 +62,7 @@ public class SessionManager implements Serializable {
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
             alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
-        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()+AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
     }
 
     public static void cancelAlarmRefreshToken() {
