@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -48,7 +49,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     }
 
     public void registerHandler(View view) {
-
+        Log.i("Debug","entra");
         String emailText = email.getText().toString();
         String showError = "";
         ValidationState validateEmail = validateEmail(emailText);
@@ -138,6 +139,8 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     @Override
     public void activityTo(Class c){
         Intent intent = new Intent(Registration.this, c);
+        intent.putExtra("event","Register");
+        intent.putExtra("description","New user registered in the system");
         startActivity(intent);
     }
 

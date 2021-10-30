@@ -75,6 +75,8 @@ public class Login extends AppCompatActivity implements AsyncInterface, MetricsI
     @Override
     public void activityTo(Class c){
         Intent intent = new Intent(Login.this, c);
+        intent.putExtra("event","Login");
+        intent.putExtra("description","A user has logged in to the system");
         startActivity(intent);
     }
 

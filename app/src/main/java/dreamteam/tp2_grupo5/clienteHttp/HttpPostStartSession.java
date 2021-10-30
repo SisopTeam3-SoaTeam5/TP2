@@ -40,7 +40,10 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
         this.postData = new JSONObject(postData);
         this.exception = null;
         this.caller = (AsyncInterface) a;
-        this.metrics = (MetricsInterface) a;
+        if (caller.getEndpoint().equals(Constants.login))
+            this.metrics = (MetricsInterface) a;
+        else
+            metrics = null;
         this.calendar = Calendar.getInstance();
     }
 
@@ -66,7 +69,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        if(isConnected) {
+        if (isConnected) {
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -104,7 +107,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
 
 
     protected void onPostExecute(String response) {
-        if(isConnected) {
+        if (isConnected) {
             try {
                 super.onPostExecute(response);
                 if (exception != null) {
@@ -113,25 +116,24 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                 }
                 if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
                     handleLoginAndRegistration(response);
-                    if (caller.getEndpoint().equals(Constants.register)){
+                    if (caller.getEndpoint().equals(Constants.register)) {
                         caller.showToast(Constants.successRegister);
-                    }
-                    else if (caller.getEndpoint().equals(Constants.login)){
+                    } else if (caller.getEndpoint().equals(Constants.login)) {
                         caller.showToast(Constants.successLoggin);
                         int hour = calendar.get(Calendar.HOUR_OF_DAY);
                         String key = "";
-                        if(hour < 12){
+                        if (hour < 12) {
                             key = "M";
-                        }else{
+                        } else {
                             key = "T";
                         }
                         Integer value = metrics.getPreferences(key);
-                        if(value == 0){
+                        if (value == 0) {
                             value = 1;
-                        }else{
+                        } else {
                             value++;
                         }
-                        metrics.writePreferences(key,value);
+                        metrics.writePreferences(key, value);
                     }
                     return;
                 }
@@ -140,9 +142,9 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             caller.showToast("No internet connection" + System.lineSeparator() +
-                                     "Try again later");
+                    "Try again later");
         }
     }
 
@@ -151,8 +153,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
         SessionManager.tokenRefresh = sessionMap.tokenRefresh;
-        SessionManager.setTokenRefreshAlarm((Context) caller);
-        System.out.println("created session: " + SessionManager.token);
+        System.out.println("created session: " + SessionManager.token + "------------------------" + SessionManager.tokenRefresh);
         caller.activityTo(Homepage.class);
         caller.finalize();
     }
