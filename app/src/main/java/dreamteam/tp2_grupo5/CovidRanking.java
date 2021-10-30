@@ -32,7 +32,6 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     RecyclerView recyclerView;
     HashMap<Integer, RankingItem> stats;
     SensorManager sensor;
-    ProgressDialog nDialog;
     boolean desc = true;
     CustomAdapter customAdapter;
     float maxLightValue;
