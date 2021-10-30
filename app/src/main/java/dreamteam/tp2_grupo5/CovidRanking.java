@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,7 +31,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     boolean desc = true;
     CustomAdapter customAdapter;
     float maxLightValue;
-
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +43,8 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         recyclerView = findViewById(R.id.RecycleView);
         recyclerView.setLayoutManager(manager);
         customAdapter = new CustomAdapter(stats, this);
-//        customAdapter.registerAdapterDataObserver(new DataSetObserver(){
-//            @Override
-//            public void onChanged(){
-//                super.onChanged();
-//            }
-//        });
         recyclerView.setAdapter(customAdapter);
+        sharedPreferences = getSharedPreferences("Shake", Context.MODE_PRIVATE);
         sensor = (SensorManager) getSystemService(SENSOR_SERVICE);
         registerSensor(Sensor.TYPE_ACCELEROMETER);
         registerSensor(Sensor.TYPE_LIGHT);
@@ -61,7 +58,6 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onPause() {
-        //  unregisterSensor();
         super.onPause();
     }
 
@@ -135,8 +131,8 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     }
 
     private void reSortRanking() {
+
         ArrayList<RankingItem> values = new ArrayList<>(stats.values());
-        int max = values.size() - 1;
         stats.clear();
         if (desc) {
             values.sort(new RankingItemComparator());
@@ -147,7 +143,9 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
                 newStats.put(i, item);
                 i++;
             }
-
+            Integer value = getPreferences("DtoA");
+            value++;
+            writePreferences("DtoA",value);
             stats.putAll(newStats);
         } else {
 
@@ -160,9 +158,24 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
                 i++;
             }
 
+            Integer value = getPreferences("AtoD");
+            value++;
+            writePreferences("AtoD",value);
+
             stats.putAll(newStats);
         }
         desc = !desc;
     }
+
+    private void writePreferences(String key, Integer value){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
+    }
+
+    private Integer getPreferences(String key) {
+        return sharedPreferences.getInt(key, 0);
+    }
+
 }
 

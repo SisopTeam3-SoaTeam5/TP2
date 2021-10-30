@@ -31,7 +31,6 @@ public class MetricsViewer extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(metric, Context.MODE_PRIVATE);
         switch (metric){
             case "Login":
-
                 title.setText("Login Metrics");
                 metricA.setText("Login from 00:00hs to 11:59hs");
                 metricB.setText("Login from 12:00hs to 23:59hs");
@@ -44,6 +43,10 @@ public class MetricsViewer extends AppCompatActivity {
                 title.setText("Shake Metrics");
                 metricA.setText("Shake from Ascending to Descending");
                 metricB.setText("Shake from Descending to Ascending");
+                int c =  sharedPreferences.getInt("AtoD", 0);
+                int d =  sharedPreferences.getInt("DtoA",0);
+                valueA.setText("" + c);
+                valueB.setText("" + d);
                 break;
             default:
                 title.setText("Error");
