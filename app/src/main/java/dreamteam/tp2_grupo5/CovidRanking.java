@@ -103,20 +103,25 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     }
 
     private void changeBackgroundColor(float color) {
+        registerLightEvent(color);
+        previousColor=color;
         float scaledColor = 255 * color / maxLightValue;
-        if (previousColor >= 0) {
-            if (previousColor <= 127 && scaledColor > 127)
-                SessionManager.registerEvent(this,"High light","The light read by the sensor went from the lower half to the upper half of the sensor");
-            else if(scaledColor <= 127 && previousColor > 127)
-                SessionManager.registerEvent(this,"Low light","the light read by the sensor went from the upper to the lower half of the sensor");
-        }
-        previousColor=scaledColor;
         String hexColor = Integer.toHexString((int) scaledColor);
         if (hexColor.length() == 1)
             hexColor = '0'+hexColor;         //transforma, por ejemplo, F en 0F. parseColor requiere 6 caracteres;
         hexColor = "#" + hexColor + hexColor + hexColor;
         Log.i("Debug",hexColor);
         recyclerView.setBackgroundColor(Color.parseColor(hexColor));
+    }
+
+    private void registerLightEvent(float color){
+        float mitad=maxLightValue/2;
+        if (previousColor >= 0) {
+            if (previousColor <= mitad && color > mitad)
+                SessionManager.registerEvent(this,"High light","The light read by the sensor went from the lower half to the upper half of the sensor");
+            else if(color <= mitad && previousColor > mitad)
+                SessionManager.registerEvent(this,"Low light","the light read by the sensor went from the upper to the lower half of the sensor");
+        }
     }
 
     @Override
