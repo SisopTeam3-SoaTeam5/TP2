@@ -90,6 +90,8 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         registerLightEvent(color);
         previousColor = color;
         float scaledColor = 255 * color / maxLightValue;
+        if (scaledColor > 255)
+            scaledColor = 255;
         String hexColor = Integer.toHexString((int) scaledColor);
         if (hexColor.length() == 1)
             hexColor = '0' + hexColor;         //transforma, por ejemplo, F en 0F. parseColor requiere 6 caracteres;

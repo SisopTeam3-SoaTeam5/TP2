@@ -139,8 +139,6 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                     return;
                 }
                 caller.showToast("Error: " + response);
-                caller.buttonEnabled(true);
-                caller.hideText();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,6 +147,8 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
             caller.showToast("No internet connection" + System.lineSeparator() +
                     "Try again later");
         }
+        caller.buttonEnabled(true);
+        caller.hideText();
     }
 
     private void handleLoginAndRegistration(String response) {

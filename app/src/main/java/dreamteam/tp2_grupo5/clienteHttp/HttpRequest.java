@@ -102,7 +102,6 @@ public class HttpRequest extends AsyncTask<String, String, String> {
     }
 
     protected void onPostExecute(String response) {
-        System.out.println(response);
         if (isConnected) {
             try {
                 super.onPostExecute(response);
@@ -113,8 +112,8 @@ public class HttpRequest extends AsyncTask<String, String, String> {
                 if (postData == null) {   //si postData es null se refrescó el token
                     if (statusCode == HttpURLConnection.HTTP_OK)
                         tokenRefreshed(response);                                       //de lo contrario se registró evento
-                } else  if(statusCode == HttpURLConnection.HTTP_OK || statusCode == HttpURLConnection.HTTP_CREATED){
-                        Log.i("Debug",response);
+                } else if (statusCode == HttpURLConnection.HTTP_OK || statusCode == HttpURLConnection.HTTP_CREATED) {
+                    Log.i("Debug", response);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -122,12 +121,12 @@ public class HttpRequest extends AsyncTask<String, String, String> {
         } else {
             caller.showToast("Session expired" + System.lineSeparator() +
                     "No internet connection");
-            SessionManager.logout((Context)caller);
+            SessionManager.logout((Context) caller);
         }
     }
 
     private void tokenRefreshed(String response) {
-        SessionManager.registerEvent((Context) caller,"Token refreshed", "The user token was refreshed");
+        SessionManager.registerEvent((Context) caller, "Token refreshed", "The user token was refreshed");
         Gson gson = new Gson();
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
