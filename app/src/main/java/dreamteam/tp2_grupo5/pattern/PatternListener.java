@@ -12,7 +12,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import java.util.List;
 
 import dreamteam.tp2_grupo5.Constants;
-import dreamteam.tp2_grupo5.Login;
+import dreamteam.tp2_grupo5.views.Login;
 
 public class PatternListener implements PatternLockViewListener {
     PatternLockView patternLockView;

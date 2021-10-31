@@ -15,22 +15,22 @@
         android:theme="@style/Theme.TP2Grupo5"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".MetricsViewer"
+            android:name=".views.MetricsViewer"
             android:exported="true" />
         <activity
-            android:name=".CovidRanking"
+            android:name=".views.CovidRanking"
             android:exported="true" />
         <activity
-            android:name=".Homepage"
+            android:name=".views.Homepage"
             android:exported="true" />
         <activity
-            android:name=".Registration"
+            android:name=".views.Registration"
             android:exported="true" />
         <activity
-            android:name=".Login"
+            android:name=".views.Login"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

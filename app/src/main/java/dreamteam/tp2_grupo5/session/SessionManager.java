@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
-import dreamteam.tp2_grupo5.Login;
+import dreamteam.tp2_grupo5.views.Login;
 import dreamteam.tp2_grupo5.clienteHttp.HttpRequest;
 
 public class SessionManager implements Serializable {

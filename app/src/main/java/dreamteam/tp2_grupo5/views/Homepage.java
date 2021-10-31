@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 
+import dreamteam.tp2_grupo5.Constants;
+import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.CoronavirusDataService;
 import dreamteam.tp2_grupo5.session.SessionManager;

@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,13 +16,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import dreamteam.tp2_grupo5.Constants;
+import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
 import dreamteam.tp2_grupo5.models.RankingItem;

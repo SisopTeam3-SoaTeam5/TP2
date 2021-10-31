@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.Objects;
 
+import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.models.RankingItem;
 
 public class CustomAdapter extends RecyclerView.Adapter {

@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import dreamteam.tp2_grupo5.R;
 
 public class MetricsViewer extends AppCompatActivity {
     String metric;

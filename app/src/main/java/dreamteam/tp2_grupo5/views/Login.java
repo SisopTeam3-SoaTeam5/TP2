@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import dreamteam.tp2_grupo5.Constants;
+import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
 import dreamteam.tp2_grupo5.clienteHttp.MetricsInterface;

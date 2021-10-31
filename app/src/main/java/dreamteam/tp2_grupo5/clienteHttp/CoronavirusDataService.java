@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import dreamteam.tp2_grupo5.CovidRanking;
+import dreamteam.tp2_grupo5.views.CovidRanking;
 import dreamteam.tp2_grupo5.models.LocationStats;
 import dreamteam.tp2_grupo5.models.RankingItem;
 import dreamteam.tp2_grupo5.session.SessionManager;

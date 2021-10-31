@@ -7,7 +7,7 @@
     android:background="@color/cardview_dark_background"
     android:foregroundTint="#000000"
     android:isScrollContainer="false"
-    tools:context=".MainActivity">
+    tools:context=".views.MainActivity">
 
     <com.andrognito.patternlockview.PatternLockView
         android:id="@+id/pattern_lock_view"

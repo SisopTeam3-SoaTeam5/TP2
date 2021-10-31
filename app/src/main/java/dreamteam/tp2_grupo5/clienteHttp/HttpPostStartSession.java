@@ -20,7 +20,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
-import dreamteam.tp2_grupo5.Homepage;
+import dreamteam.tp2_grupo5.views.Homepage;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.session.SessionMapper;
 

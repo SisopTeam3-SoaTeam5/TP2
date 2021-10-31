@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5;
+package dreamteam.tp2_grupo5.views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.andrognito.patternlockview.PatternLockView;
 
+import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.pattern.PatternListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         batteryText = findViewById(R.id.batteryText);
         batteryBar = findViewById(R.id.batteryBar);
-
 
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryStatus = registerReceiver(null, ifilter);
@@ -52,7 +52,5 @@ public class MainActivity extends AppCompatActivity {
         String valueText=(int) batteryPct + "%";
         batteryBar.setProgress((int) batteryPct);
         batteryText.setText(valueText);
-        Log.i("Debug", batteryPct + "");
-
     }
 }
