@@ -35,7 +35,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     SensorManager sensor;
     boolean desc = true;
     CustomAdapter customAdapter;
-    float maxLightValue;
+    final float maxLightValue = 50;
     SharedPreferences sharedPreferences;
     float previousColor = -1;
 
@@ -88,23 +88,23 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
     private void changeBackgroundColor(float color) {
         registerLightEvent(color);
-        previousColor=color;
+        previousColor = color;
         float scaledColor = 255 * color / maxLightValue;
         String hexColor = Integer.toHexString((int) scaledColor);
         if (hexColor.length() == 1)
-            hexColor = '0'+hexColor;         //transforma, por ejemplo, F en 0F. parseColor requiere 6 caracteres;
+            hexColor = '0' + hexColor;         //transforma, por ejemplo, F en 0F. parseColor requiere 6 caracteres;
         hexColor = "#" + hexColor + hexColor + hexColor;
-        Log.i("Debug",hexColor);
+        Log.i("Debug", hexColor);
         recyclerView.setBackgroundColor(Color.parseColor(hexColor));
     }
 
-    private void registerLightEvent(float color){
-        float mitad=maxLightValue/2;
+    private void registerLightEvent(float color) {
+        float mitad = maxLightValue / 2;
         if (previousColor >= 0) {
             if (previousColor <= mitad && color > mitad)
-                SessionManager.registerEvent(this,"High light","The light read by the sensor went from the lower half to the upper half of the sensor");
-            else if(color <= mitad && previousColor > mitad)
-                SessionManager.registerEvent(this,"Low light","the light read by the sensor went from the upper to the lower half of the sensor");
+                SessionManager.registerEvent(this, "High light", "The light read by the sensor went from the lower half to the upper half of the sensor");
+            else if (color <= mitad && previousColor > mitad)
+                SessionManager.registerEvent(this, "Low light", "the light read by the sensor went from the upper to the lower half of the sensor");
         }
     }
 
@@ -122,7 +122,6 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
         if (sens == Sensor.TYPE_ACCELEROMETER)
             sensName = "ACELERÓMETRO";
         else {
-            maxLightValue = selectedSensor.getMaximumRange();
             sensName = "Sensor de Luz";
         }
         if (!done)
@@ -152,7 +151,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
             }
             Integer value = getPreferences("DtoA");
             value++;
-            writePreferences("DtoA",value);
+            writePreferences("DtoA", value);
             stats.putAll(newStats);
         } else {
 
@@ -167,16 +166,16 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
             Integer value = getPreferences("AtoD");
             value++;
-            writePreferences("AtoD",value);
+            writePreferences("AtoD", value);
 
             stats.putAll(newStats);
         }
         desc = !desc;
     }
 
-    private void writePreferences(String key, Integer value){
+    private void writePreferences(String key, Integer value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key,value);
+        editor.putInt(key, value);
         editor.apply();
     }
 
