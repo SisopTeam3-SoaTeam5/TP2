@@ -14,6 +14,7 @@ import com.andrognito.patternlockview.PatternLockView;
 
 import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.pattern.PatternListener;
+import dreamteam.tp2_grupo5.presenters.MainActivityPresenter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,17 +22,19 @@ public class MainActivity extends AppCompatActivity {
     PatternLockView patternLockView;
     TextView batteryText;
     ProgressBar batteryBar;
-    Intent batteryStatus;
+    MainActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new MainActivityPresenter(this);
         setContentView(R.layout.activity_main);
         batteryText = findViewById(R.id.batteryText);
         batteryBar = findViewById(R.id.batteryBar);
 
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = registerReceiver(null, ifilter);
+        Intent batteryStatus = registerReceiver(null, ifilter);
+        presenter.setBatteryStatus(batteryStatus);
 
         patternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
         PatternListener patternListener = new PatternListener();
@@ -44,13 +47,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        presenter.getBatteryLevel();
+    }
 
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
-        float batteryPct = level * 100 / (float) scale;
-        String valueText=(int) batteryPct + "%";
+    public void setBatteryBar(int batteryPct) {
         batteryBar.setProgress((int) batteryPct);
+    }
+
+    public void setBatteryText(String valueText) {
         batteryText.setText(valueText);
+
     }
 }
