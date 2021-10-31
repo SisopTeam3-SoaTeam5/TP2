@@ -35,12 +35,12 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
     boolean isConnected;
     final Calendar calendar;
 
-    public HttpPostStartSession(Map<String, String> postData, AsyncInterface a) {
+    public HttpPostStartSession(Map<String, String> postData, AsyncInterface a, MetricsInterface m) {
         this.postData = new JSONObject(postData);
         this.exception = null;
         this.caller =  a;
         if (caller.getEndpoint().equals(Constants.login))
-            this.metrics = (MetricsInterface) a;
+            this.metrics = m;
         else
             metrics = null;
         this.calendar = Calendar.getInstance();

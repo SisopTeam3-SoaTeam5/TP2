@@ -88,7 +88,7 @@ public class RegisterPresenter implements AsyncInterface {
         values.put("commission", commissionText);
         values.put("group", groupText);
 
-        HttpPostStartSession task = new HttpPostStartSession(values, this);
+        HttpPostStartSession task = new HttpPostStartSession(values, this, null);
         task.execute(Constants.baseUrl + Constants.register);
 
     }
