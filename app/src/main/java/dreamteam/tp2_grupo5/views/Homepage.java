@@ -22,30 +22,30 @@ import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.CoronavirusDataService;
+import dreamteam.tp2_grupo5.presenters.HomepagePresenter;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.session.TokenRefresh;
 
-public class Homepage extends AppCompatActivity implements AsyncInterface {
+public class Homepage extends AppCompatActivity {
 
     Button covidRankingButton;
+    HomepagePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent=getIntent();
-        Bundle params=intent.getExtras();
-        SessionManager.registerEvent(this, params.getString("event"), params.getString("description"));
-        SessionManager.setTokenRefreshAlarm(this);
+        presenter = new HomepagePresenter(this);
+        presenter.registerEvent();
+        presenter.scheduleAlarm();
         setContentView(R.layout.activity_homepage);
-        //registro receiver para alarma refresh token
-        registerReceiver(new TokenRefresh(), new IntentFilter("com.token.refresh"));
+        presenter.registerRefreshReceiver();
         covidRankingButton = findViewById(R.id.button2);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SessionManager.cancelAlarmRefreshToken();
+        presenter.cancelAlarm();
     }
 
 
@@ -59,79 +59,29 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
-            if (SessionManager.logout(this))
-            return true;
+            return presenter.logout();
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void onCovidRankingHandler(View view) {
-        CoronavirusDataService task = new CoronavirusDataService(Homepage.this);
-        task.execute(Constants.virusDataUrl);
+        presenter.getCovidData();
     }
 
     public void onLoginMetricsHandler(View view) {
-        Intent intent = new Intent(Homepage.this, MetricsViewer.class);
-        intent.putExtra("metric", "Login");
-        startActivity(intent);
+        presenter.openMetricsPage("Login");
     }
 
     public void onShakeMetricsHandler(View view) {
-        Intent intent = new Intent(Homepage.this, MetricsViewer.class);
-        intent.putExtra("metric", "Shake");
-        startActivity(intent);
+        presenter.openMetricsPage("Shake");
     }
 
-    @Override
-    public void showToast(String msg) {
-        Toast.makeText(Homepage.this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void activityTo(Class c) {
-        Intent intent = new Intent(Homepage.this, c);
-        startActivity(intent);
-    }
-
-    @Override
-    public void activityToWithPayload(Class c, Serializable s) {
-        Intent intent = new Intent(Homepage.this, c);
-        intent.putExtra("payload", s);
-        startActivity(intent);
-    }
-
-    @Override
-    public String getEndpoint() {
-        return Constants.homePage;
-    }
-
-    @Override
-    public void finalize() {
-        finish();
-    }
-
-    @Override
-    public boolean getConnection() {
-        ConnectivityManager cm =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
-
-    @Override
-    public void buttonEnabled(boolean b) {
+    public void enableButton(boolean b) {
         covidRankingButton.setEnabled(b);
     }
 
-    @Override
-    public void setTextToVisible() {
-
-    }
-
-    @Override
-    public void hideText() {
-
+    public void showToast(String msg) {
+        Toast.makeText(Homepage.this, msg, Toast.LENGTH_SHORT).show();
     }
 
 }

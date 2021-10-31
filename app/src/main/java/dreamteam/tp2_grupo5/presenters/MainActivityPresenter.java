@@ -17,7 +17,9 @@ public class MainActivityPresenter {
         this.activity = activity;
     }
 
-    public void setBatteryStatus(Intent batteryStatus) {
+    public void setBatteryStatus() {
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = activity.registerReceiver(null, ifilter);
         this.batteryStatus = batteryStatus;
     }
 

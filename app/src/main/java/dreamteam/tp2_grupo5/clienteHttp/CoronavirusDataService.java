@@ -28,9 +28,11 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     private final AsyncInterface caller;
     Integer integer;
     private boolean isConnected;
+    final Context context;
 
-    public CoronavirusDataService(Context caller) {
-        this.caller = (AsyncInterface) caller;
+    public CoronavirusDataService(AsyncInterface caller, Context context) {
+        this.caller = caller;
+        this.context = context;
     }
 
     public HashMap<String, Integer> fetchVirusData(String uri) {
@@ -98,7 +100,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     protected void onPostExecute(HashMap<String, Integer> result) {
         if (isConnected) {
             super.onPostExecute(result);
-            SessionManager.registerEvent((Context) caller, "CovidRanking", "The user obtained the covid ranking");
+            SessionManager.registerEvent(caller, "CovidRanking", "The user obtained the covid ranking", context);
             HashMap<Integer, RankingItem> sortedStats = sortStats(result);
             System.out.println("sortedStats: " + sortedStats);
             caller.activityToWithPayload(CovidRanking.class, sortedStats);

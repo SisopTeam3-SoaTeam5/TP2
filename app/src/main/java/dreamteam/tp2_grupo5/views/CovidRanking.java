@@ -78,7 +78,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
                     reSortRanking();
                     Log.i("stats", "re ordenando");
                     customAdapter.notifyDataSetChanged();
-                    SessionManager.registerEvent(this, "Shake", "User re-ordered covid ranking");
+                    //SessionManager.registerEvent(this, "Shake", "User re-ordered covid ranking");
                 }
             } else if (sensorType == Sensor.TYPE_LIGHT) {
                 changeBackgroundColor(values[0]);
@@ -104,10 +104,10 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     private void registerLightEvent(float color) {
         float mitad = maxLightValue / 2;
         if (previousColor >= 0) {
-            if (previousColor <= mitad && color > mitad)
-                SessionManager.registerEvent(this, "High light", "The light read by the sensor went from the lower half to the upper half of the sensor");
-            else if (color <= mitad && previousColor > mitad)
-                SessionManager.registerEvent(this, "Low light", "the light read by the sensor went from the upper to the lower half of the sensor");
+            if (previousColor <= mitad && color > mitad){}
+              //  SessionManager.registerEvent(this, "High light", "The light read by the sensor went from the lower half to the upper half of the sensor");
+            else if (color <= mitad && previousColor > mitad){}
+               // SessionManager.registerEvent(this, "Low light", "the light read by the sensor went from the upper to the lower half of the sensor");
         }
     }
 
