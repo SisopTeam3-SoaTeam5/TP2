@@ -17,7 +17,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import dreamteam.tp2_grupo5.Constants;
@@ -34,7 +33,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
     private final MetricsInterface metrics;
     private int statusCode;
     boolean isConnected;
-    Calendar calendar;
+    final Calendar calendar;
 
     public HttpPostStartSession(Map<String, String> postData, Context a) {
         this.postData = new JSONObject(postData);
@@ -65,6 +64,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         isConnected = caller.getConnection();
+        caller.buttonEnabled(false);
     }
 
     @Override
@@ -114,8 +114,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                     caller.showToast("Error: " + exception.toString());
                     return;
                 }
-                if (statusCode == HttpURLConnection.HTTP_OK) {  //capaz taria bueno mandar url por parametro y evitar la funcion getEndpoint
-                    handleLoginAndRegistration(response);
+                if (statusCode == HttpURLConnection.HTTP_OK) {
                     if (caller.getEndpoint().equals(Constants.register)) {
                         caller.showToast(Constants.successRegister);
                     } else if (caller.getEndpoint().equals(Constants.login)) {
@@ -135,9 +134,11 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                         }
                         metrics.writePreferences(key, value);
                     }
+                    handleLoginAndRegistration(response);
                     return;
                 }
                 caller.showToast("Error: " + response);
+                caller.buttonEnabled(true);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -153,7 +154,6 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;
         SessionManager.tokenRefresh = sessionMap.tokenRefresh;
-        System.out.println("created session: " + SessionManager.token + "------------------------" + SessionManager.tokenRefresh);
         caller.activityTo(Homepage.class);
         caller.finalize();
     }

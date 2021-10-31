@@ -1,7 +1,5 @@
 package dreamteam.tp2_grupo5;
 
-import com.andrognito.patternlockview.utils.PatternLockUtils;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +27,6 @@ public class Constants {
     public final static String correctPattern = "You're in :)";
     public final static String wrongPattern = "Wrong :(";
     public final static String virusDataUrl = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
-    public final static float ACC = 13;
+    public final static float ACC = 25;
 
 }

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -24,6 +25,8 @@ import dreamteam.tp2_grupo5.session.TokenRefresh;
 
 public class Homepage extends AppCompatActivity implements AsyncInterface {
 
+    Button covidRankingButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,7 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
         setContentView(R.layout.activity_homepage);
         //registro receiver para alarma refresh token
         registerReceiver(new TokenRefresh(), new IntentFilter("com.token.refresh"));
+        covidRankingButton = findViewById(R.id.button2);
     }
 
     @Override
@@ -111,6 +115,11 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void buttonEnabled(boolean b) {
+        covidRankingButton.setEnabled(b);
     }
 
 }

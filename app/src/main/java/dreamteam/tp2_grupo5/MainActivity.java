@@ -1,7 +1,6 @@
 package dreamteam.tp2_grupo5;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,7 +16,7 @@ import dreamteam.tp2_grupo5.pattern.PatternListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    String patternKey = "012";
+    final String patternKey = "012";
     PatternLockView patternLockView;
     TextView batteryText;
     ProgressBar batteryBar;

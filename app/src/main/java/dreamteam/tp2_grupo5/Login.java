@@ -10,7 +10,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -26,14 +28,19 @@ public class Login extends AppCompatActivity implements AsyncInterface, MetricsI
     EditText email;
     EditText password;
     SharedPreferences sharedPreferences;
+    TextView loading;
+    Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loading = findViewById(R.id.textView7);
+        loading.setVisibility(View.GONE);
         email = findViewById(R.id.editTextTextEmailAddress);
         password = findViewById(R.id.editTextTextPassword);
         sharedPreferences = getSharedPreferences("Login",Context.MODE_PRIVATE);
+        loginButton = findViewById(R.id.button);
     }
 
 
@@ -103,6 +110,11 @@ public class Login extends AppCompatActivity implements AsyncInterface, MetricsI
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void buttonEnabled(boolean b) {
+        loginButton.setEnabled(b);
     }
 
 

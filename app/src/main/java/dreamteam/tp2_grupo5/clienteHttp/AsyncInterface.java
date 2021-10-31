@@ -9,4 +9,5 @@ public interface AsyncInterface {
     String getEndpoint();
     void finalize();
     boolean getConnection();
+    void buttonEnabled(boolean b);
 }

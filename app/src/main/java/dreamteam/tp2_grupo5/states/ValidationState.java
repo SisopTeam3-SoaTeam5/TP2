@@ -1,8 +1,8 @@
 package dreamteam.tp2_grupo5.states;
 
 public class ValidationState {
-    boolean status;
-    String message;
+    final boolean status;
+    final String message;
 
     public ValidationState(boolean status, String message) {
         this.status = status;

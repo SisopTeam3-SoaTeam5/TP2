@@ -24,7 +24,7 @@ import dreamteam.tp2_grupo5.session.SessionManager;
 public class CoronavirusDataService extends AsyncTask<String, String, HashMap<String, Integer>> {
 
 
-    HashMap<String, Integer> covidStats = new HashMap<String, Integer>();
+    HashMap<String, Integer> covidStats = new HashMap<>();
     private final AsyncInterface caller;
     Integer integer;
     private boolean isConnected;
@@ -37,7 +37,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
         HttpURLConnection urlConnection = null;
         try {
             String result = null;
-            HashMap<String, Integer> stats = new HashMap<String, Integer>();
+            HashMap<String, Integer> stats = new HashMap<>();
             URL url = new URL(uri);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -84,6 +84,7 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
     @Override
     protected void onPreExecute() {
         isConnected = caller.getConnection();
+        caller.buttonEnabled(false);
     }
 
     @Override
@@ -105,9 +106,10 @@ public class CoronavirusDataService extends AsyncTask<String, String, HashMap<St
             caller.showToast("No internet connection" + System.lineSeparator() +
                     "Try again later");
         }
+        caller.buttonEnabled(true);
     }
 
-    private StringBuilder convertInputStreamToString(InputStreamReader inputStream) throws IOException, IOException {
+    private StringBuilder convertInputStreamToString(InputStreamReader inputStream) throws IOException {
         BufferedReader br = new BufferedReader(inputStream);
         StringBuilder result = new StringBuilder();
         String line;

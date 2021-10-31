@@ -1,8 +1,6 @@
 package dreamteam.tp2_grupo5;
 
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +16,8 @@ import dreamteam.tp2_grupo5.models.RankingItem;
 
 public class CustomAdapter extends RecyclerView.Adapter {
 
-    HashMap<Integer, RankingItem> stats;
-    Context context;
+    final HashMap<Integer, RankingItem> stats;
+    final Context context;
 
     public CustomAdapter(HashMap<Integer, RankingItem> stats, Context context) {
         this.stats = stats;
@@ -47,7 +45,7 @@ public class CustomAdapter extends RecyclerView.Adapter {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView element;
+        final TextView element;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -83,7 +83,7 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
 
         Map<String, String> values = new HashMap<>();
-        values.put("env", Constants.testEnv);
+        values.put("env", Constants.prodEnv);
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);
@@ -168,5 +168,10 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void buttonEnabled(boolean b) {
+
     }
 }

@@ -1,7 +1,6 @@
 package dreamteam.tp2_grupo5.models;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 public class RankingItem implements Serializable {
     private String country;

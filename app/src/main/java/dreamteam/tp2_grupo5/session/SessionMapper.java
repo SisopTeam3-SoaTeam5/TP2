@@ -7,7 +7,7 @@ public class SessionMapper {
     @SerializedName("token")
     public String token;
     @SerializedName("token_refresh")
-    public String tokenRefresh;
+    public final String tokenRefresh;
 
     public SessionMapper(String token, String tokenRefresh) {
         this.token = token;

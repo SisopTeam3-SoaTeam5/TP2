@@ -25,7 +25,7 @@ public class HttpRequest extends AsyncTask<String, String, String> {
 
     private final JSONObject postData;
     private Exception exception;
-    Map<String, String> headers;
+    final Map<String, String> headers;
     private int statusCode;
     private boolean isConnected;
     private final AsyncInterface caller;

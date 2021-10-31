@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -39,6 +39,7 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     SharedPreferences sharedPreferences;
     float previousColor = -1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +61,6 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     protected void onStop() {
         unregisterSensor();
         super.onStop();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    //Considerar usar una bandera en vez de onPause y onResume
-    @Override
-    protected void onResume() {
-        // registerSensor();
-        super.onResume();
     }
 
     @Override
@@ -227,6 +216,11 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void buttonEnabled(boolean b) {
+
     }
 }
 
