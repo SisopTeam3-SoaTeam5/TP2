@@ -1,5 +1,6 @@
 package dreamteam.tp2_grupo5.clienteHttp;
 
+
 import java.io.Serializable;
 
 public interface AsyncInterface {
@@ -10,4 +11,6 @@ public interface AsyncInterface {
     void finalize();
     boolean getConnection();
     void buttonEnabled(boolean b);
+    void setTextToVisible();
+    void hideText();
 }

@@ -122,4 +122,14 @@ public class Homepage extends AppCompatActivity implements AsyncInterface {
         covidRankingButton.setEnabled(b);
     }
 
+    @Override
+    public void setTextToVisible() {
+
+    }
+
+    @Override
+    public void hideText() {
+
+    }
+
 }

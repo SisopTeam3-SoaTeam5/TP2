@@ -174,4 +174,14 @@ public class Registration extends AppCompatActivity implements AsyncInterface {
     public void buttonEnabled(boolean b) {
 
     }
+
+    @Override
+    public void setTextToVisible() {
+
+    }
+
+    @Override
+    public void hideText() {
+
+    }
 }

@@ -222,5 +222,15 @@ public class CovidRanking extends AppCompatActivity implements SensorEventListen
     public void buttonEnabled(boolean b) {
 
     }
+
+    @Override
+    public void setTextToVisible() {
+
+    }
+
+    @Override
+    public void hideText() {
+
+    }
 }
 

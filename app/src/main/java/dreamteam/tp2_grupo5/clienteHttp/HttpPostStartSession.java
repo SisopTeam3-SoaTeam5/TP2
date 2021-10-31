@@ -65,6 +65,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
     protected void onPreExecute() {
         isConnected = caller.getConnection();
         caller.buttonEnabled(false);
+        caller.setTextToVisible();
     }
 
     @Override
@@ -139,6 +140,7 @@ public class HttpPostStartSession extends AsyncTask<String, String, String> {
                 }
                 caller.showToast("Error: " + response);
                 caller.buttonEnabled(true);
+                caller.hideText();
 
             } catch (Exception e) {
                 e.printStackTrace();

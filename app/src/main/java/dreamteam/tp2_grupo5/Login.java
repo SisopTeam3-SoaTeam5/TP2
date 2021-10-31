@@ -117,6 +117,16 @@ public class Login extends AppCompatActivity implements AsyncInterface, MetricsI
         loginButton.setEnabled(b);
     }
 
+    @Override
+    public void setTextToVisible() {
+        loading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideText() {
+        loading.setVisibility(View.GONE);
+    }
+
 
     @Override
     public void writePreferences(String key, Integer value) {
