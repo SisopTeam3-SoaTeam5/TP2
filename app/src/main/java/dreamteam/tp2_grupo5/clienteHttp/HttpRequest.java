@@ -29,10 +29,12 @@ public class HttpRequest extends AsyncTask<String, String, String> {
     private int statusCode;
     private boolean isConnected;
     private final AsyncInterface caller;
+    private final Context context;
 
-    public HttpRequest(Map<String, String> postData, Map<String, String> headers, Context caller) {
+    public HttpRequest(Map<String, String> postData, Map<String, String> headers, AsyncInterface caller, Context context) {
         this.postData = postData != null ? new JSONObject(postData) : null;
-        this.caller = (AsyncInterface) caller;
+        this.caller = caller;
+        this.context = context;
         this.exception = null;
         this.headers = headers;
     }
@@ -121,12 +123,12 @@ public class HttpRequest extends AsyncTask<String, String, String> {
         } else {
             caller.showToast("Session expired" + System.lineSeparator() +
                     "No internet connection");
-            SessionManager.logout((Context) caller);
+            SessionManager.logout(context);
         }
     }
 
     private void tokenRefreshed(String response) {
-        SessionManager.registerEvent((Context) caller, "Token refreshed", "The user token was refreshed");
+        SessionManager.registerEvent(caller, "Token refreshed", "The user token was refreshed", context);
         Gson gson = new Gson();
         SessionMapper sessionMap = gson.fromJson(response, SessionMapper.class);
         SessionManager.token = sessionMap.token;

@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
         batteryText = findViewById(R.id.batteryText);
         batteryBar = findViewById(R.id.batteryBar);
 
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = registerReceiver(null, ifilter);
-        presenter.setBatteryStatus(batteryStatus);
+        presenter.setBatteryStatus();
 
         patternLockView = (PatternLockView) findViewById(R.id.pattern_lock_view);
         PatternListener patternListener = new PatternListener();
