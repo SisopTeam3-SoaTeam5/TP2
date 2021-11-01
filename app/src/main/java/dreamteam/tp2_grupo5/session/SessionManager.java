@@ -50,7 +50,7 @@ public class SessionManager implements Serializable {
         Map<String, String> header = new HashMap<>();
         Map<String, String> values = new HashMap<>();
         header.put("Authorization", "Bearer " + SessionManager.tokenRefresh);
-        values.put("env", Constants.testEnv);
+        values.put("env", Constants.prodEnv);
         values.put("type_events", evento);
         values.put("description", description);
         HttpRequest task = new HttpRequest(values, header, caller, context);

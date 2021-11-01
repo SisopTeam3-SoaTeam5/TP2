@@ -29,7 +29,7 @@ public class HomepagePresenter implements AsyncInterface {
     public void registerEvent() {
         Intent intent = activity.getIntent();
         Bundle params = intent.getExtras();
-        SessionManager.registerEvent(this, params.getString("event"), params.getString("description"),activity);
+        SessionManager.registerEvent(this, params.getString("event"), params.getString("description"), activity);
     }
 
     public void scheduleAlarm() {
@@ -56,6 +56,7 @@ public class HomepagePresenter implements AsyncInterface {
     public void openMetricsPage(String metric) {
         Intent intent = new Intent(activity, MetricsViewer.class);
         intent.putExtra("metric", metric);
+        Log.i("Debug", metric);
         activity.startActivity(intent);
     }
 
@@ -101,7 +102,7 @@ public class HomepagePresenter implements AsyncInterface {
     public void activityToWithPayload(Class c, Serializable s) {
         Intent intent = new Intent(activity, c);
         intent.putExtra("payload", s);
-        Log.i("Debug","Envia hacia ranking");
+        Log.i("Debug", "Envia hacia ranking");
         activity.startActivity(intent);
     }
 
