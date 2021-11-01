@@ -3,11 +3,6 @@ package dreamteam.tp2_grupo5.views;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,15 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.Serializable;
-
-import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.R;
-import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
-import dreamteam.tp2_grupo5.clienteHttp.CoronavirusDataService;
 import dreamteam.tp2_grupo5.presenters.HomepagePresenter;
-import dreamteam.tp2_grupo5.session.SessionManager;
-import dreamteam.tp2_grupo5.session.TokenRefresh;
 
 public class Homepage extends AppCompatActivity {
 

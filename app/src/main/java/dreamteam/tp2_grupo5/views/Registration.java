@@ -3,19 +3,12 @@ package dreamteam.tp2_grupo5.views;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.R;
-import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
 import dreamteam.tp2_grupo5.presenters.RegisterPresenter;
-import dreamteam.tp2_grupo5.states.ValidationState;
 
 public class Registration extends AppCompatActivity {
 

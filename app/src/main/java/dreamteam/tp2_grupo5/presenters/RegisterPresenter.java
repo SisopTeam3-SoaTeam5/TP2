@@ -57,7 +57,7 @@ public class RegisterPresenter implements AsyncInterface {
 
     }
 
-    public void handleRegistration(String emailText, String passwordText, String repeatedPassword, String commissionText, String nameText, String lastnameText, String dniText, String groupText){
+    public void handleRegistration(String emailText, String passwordText, String repeatedPassword, String commissionText, String nameText, String lastnameText, String dniText, String groupText) {
         String showError = "";
         ValidationState validateEmail = validateEmail(emailText);
         if (!validateEmail.getStatus())
@@ -99,10 +99,13 @@ public class RegisterPresenter implements AsyncInterface {
     }
 
     @Override
-    public void activityTo(Class c){
+    public void activityTo(Class c) {
         Intent intent = new Intent(registration, c);
-        intent.putExtra("event","Register");
-        intent.putExtra("description","New user registered in the system");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP        //Cierra todas las actividades abiertas
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("event", "Register");
+        intent.putExtra("description", "New user registered in the system");
         registration.startActivity(intent);
     }
 
@@ -114,7 +117,7 @@ public class RegisterPresenter implements AsyncInterface {
     }
 
     @Override
-    public String getEndpoint(){
+    public String getEndpoint() {
         return Constants.register;
     }
 
