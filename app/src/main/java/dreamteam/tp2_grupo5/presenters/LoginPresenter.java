@@ -13,17 +13,17 @@ import java.util.Map;
 import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.clienteHttp.HttpPostStartSession;
-import dreamteam.tp2_grupo5.models.LoginModel;
+import dreamteam.tp2_grupo5.models.PreferencesModel;
 import dreamteam.tp2_grupo5.views.Login;
 import dreamteam.tp2_grupo5.views.Registration;
 
 public class LoginPresenter implements AsyncInterface {
     Login login;
-    LoginModel loginModel;
+    PreferencesModel loginModel;
 
     public LoginPresenter(Login login) {
         this.login = login;
-        this.loginModel = new LoginModel(login.getSharedPreferences());
+        this.loginModel = new PreferencesModel(login.getSharedPreferences("Login",Context.MODE_PRIVATE));
     }
 
     public void goToRegistration(){

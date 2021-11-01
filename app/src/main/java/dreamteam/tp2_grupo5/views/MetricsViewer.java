@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import dreamteam.tp2_grupo5.R;
+import dreamteam.tp2_grupo5.presenters.MetricsPresenter;
 
 public class MetricsViewer extends AppCompatActivity {
     String metric;
@@ -30,31 +31,17 @@ public class MetricsViewer extends AppCompatActivity {
         metricB = findViewById(R.id.textView4);
         valueA = findViewById(R.id.textView5);
         valueB = findViewById(R.id.textView6);
-        sharedPreferences = getSharedPreferences(metric, Context.MODE_PRIVATE);
-        switch (metric){
-            case "Login":
-                title.setText("Login Metrics");
-                metricA.setText("Login from 00:00hs to 11:59hs");
-                metricB.setText("Login from 12:00hs to 23:59hs");
-                int a =  sharedPreferences.getInt("M", 0);
-                int b =  sharedPreferences.getInt("T",0);
-                valueA.setText("" + a);
-                valueB.setText("" + b);
-                break;
-            case "Shake":
-                title.setText("Shake Metrics");
-                metricA.setText("Shake from Ascending to Descending");
-                metricB.setText("Shake from Descending to Ascending");
-                int c =  sharedPreferences.getInt("AtoD", 0);
-                int d =  sharedPreferences.getInt("DtoA",0);
-                valueA.setText("" + c);
-                valueB.setText("" + d);
-                break;
-            default:
-                title.setText("Error");
-                metricA.setText("Error");
-                metricB.setText("Error");
+        MetricsPresenter metricsPresenter = new MetricsPresenter(MetricsViewer.this, metric);
+    }
 
-        }
+    public void setUI(String titleText, String metricAText, String metricBText){
+        title.setText(titleText); //"Login Metrics" "Shake Metrics" "Error"
+        metricA.setText(metricAText);//"Login from 00:00hs to 11:59hs" "Shake from Ascending to Descending"
+        metricB.setText(metricBText); //"Login from 12:00hs to 23:59hs" "Shake from Descending to Ascending"
+    }
+
+    public void setValues(int a, int b){
+        valueA.setText(String.format("%d", a));
+        valueB.setText(String.format("%d", b));
     }
 }

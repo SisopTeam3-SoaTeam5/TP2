@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dreamteam.tp2_grupo5.Constants;
+import dreamteam.tp2_grupo5.CustomAdapter;
 import dreamteam.tp2_grupo5.R;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
 import dreamteam.tp2_grupo5.models.RankingItem;
-import dreamteam.tp2_grupo5.session.SessionManager;
 
 public class CovidRanking extends AppCompatActivity implements SensorEventListener, AsyncInterface {
 
