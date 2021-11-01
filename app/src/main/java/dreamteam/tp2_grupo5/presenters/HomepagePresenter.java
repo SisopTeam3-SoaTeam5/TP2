@@ -1,13 +1,12 @@
 package dreamteam.tp2_grupo5.presenters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -102,6 +101,7 @@ public class HomepagePresenter implements AsyncInterface {
     public void activityToWithPayload(Class c, Serializable s) {
         Intent intent = new Intent(activity, c);
         intent.putExtra("payload", s);
+        Log.i("Debug","Envia hacia ranking");
         activity.startActivity(intent);
     }
 

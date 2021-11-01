@@ -1,7 +1,5 @@
 package dreamteam.tp2_grupo5.presenters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;

@@ -46,14 +46,14 @@ public class SessionManager implements Serializable {
         return true;
     }
 
-    public static void registerEvent(AsyncInterface caller, String evento, String description,Context context) {
+    public static void registerEvent(AsyncInterface caller, String evento, String description, Context context) {
         Map<String, String> header = new HashMap<>();
         Map<String, String> values = new HashMap<>();
         header.put("Authorization", "Bearer " + SessionManager.tokenRefresh);
         values.put("env", Constants.testEnv);
         values.put("type_events", evento);
         values.put("description", description);
-        HttpRequest task = new HttpRequest(values, header, caller,context);
+        HttpRequest task = new HttpRequest(values, header, caller, context);
         task.execute(Constants.baseUrl + Constants.regEvent, "POST");
     }
 
@@ -63,7 +63,7 @@ public class SessionManager implements Serializable {
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
             alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
-        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 5000, alarmIntent);
+        alarm.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
     }
 
     public static void cancelAlarmRefreshToken() {
