@@ -79,7 +79,7 @@ public class RegisterPresenter implements AsyncInterface {
         }
 
         Map<String, String> values = new HashMap<>();
-        values.put("env", Constants.testEnv);
+        values.put("env", Constants.prodEnv);
         values.put("name", nameText);
         values.put("lastname", lastnameText);
         values.put("dni", dniText);

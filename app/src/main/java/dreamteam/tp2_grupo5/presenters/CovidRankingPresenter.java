@@ -2,7 +2,6 @@ package dreamteam.tp2_grupo5.presenters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -11,7 +10,6 @@ import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,29 +18,29 @@ import java.util.HashMap;
 import dreamteam.tp2_grupo5.Constants;
 import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
+import dreamteam.tp2_grupo5.models.PreferencesModel;
 import dreamteam.tp2_grupo5.models.RankingItem;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.views.CovidRanking;
 import dreamteam.tp2_grupo5.CustomAdapter;
 
-public class CovidRankingModel implements SensorEventListener, AsyncInterface {
+public class CovidRankingPresenter implements SensorEventListener, AsyncInterface {
 
     CovidRanking activity;
     HashMap<Integer, RankingItem> stats;
     CustomAdapter customAdapter;
     SensorManager sensor;
-    SharedPreferences sharedPreferences;
     final float maxLightValue = 50;
     float previousColor = -1;
     boolean desc = true;
+    PreferencesModel rankingModel;
 
-
-    public CovidRankingModel(CovidRanking activity) {
+    public CovidRankingPresenter(CovidRanking activity) {
         this.activity = activity;
         sensor = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         registerSensor(Sensor.TYPE_ACCELEROMETER);
         registerSensor(Sensor.TYPE_LIGHT);
-        sharedPreferences = activity.getSharedPreferences("Shake", Context.MODE_PRIVATE);
+        rankingModel =  new PreferencesModel(activity.getSharedPreferences("Shake", Context.MODE_PRIVATE));
     }
 
     public void setStats() {
@@ -130,46 +128,28 @@ public class CovidRankingModel implements SensorEventListener, AsyncInterface {
         ArrayList<RankingItem> values = new ArrayList<>(stats.values());
         stats.clear();
         if (desc) {
-            values.sort(new RankingItemComparator());
-            HashMap<Integer, RankingItem> newStats = new HashMap<>();
-            Integer i = 0;
-
-            for (RankingItem item : values) {
-                newStats.put(i, item);
-                i++;
-            }
-            Integer value = getPreferences("DtoA");
-            value++;
-            writePreferences("DtoA", value);
-            stats.putAll(newStats);
+            resortFunction(values,"DtoA");
         } else {
-
-            values.sort(new RankingItemComparator().reversed());
-            HashMap<Integer, RankingItem> newStats = new HashMap<>();
-            Integer i = 0;
-
-            for (RankingItem item : values) {
-                newStats.put(i, item);
-                i++;
-            }
-
-            Integer value = getPreferences("AtoD");
-            value++;
-            writePreferences("AtoD", value);
-
-            stats.putAll(newStats);
+            resortFunction(values, "AtoD");
         }
         desc = !desc;
     }
 
-    private void writePreferences(String key, Integer value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
+    private void resortFunction(ArrayList<RankingItem> values, String order){
+        values.sort(new RankingItemComparator().reversed());
+        HashMap<Integer, RankingItem> newStats = new HashMap<>();
+        Integer i = 0;
 
-    private Integer getPreferences(String key) {
-        return sharedPreferences.getInt(key, 0);
+        for (RankingItem item : values) {
+            newStats.put(i, item);
+            i++;
+        }
+
+        Integer value = rankingModel.getPreferences(order);
+        value++;
+        rankingModel.writePreferences(order, value);
+
+        stats.putAll(newStats);
     }
 
     @Override

@@ -4,31 +4,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.Serializable;
-
 import dreamteam.tp2_grupo5.R;
-import dreamteam.tp2_grupo5.presenters.CovidRankingModel;
+import dreamteam.tp2_grupo5.presenters.CovidRankingPresenter;
 import dreamteam.tp2_grupo5.CustomAdapter;
 
 public class CovidRanking extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    CovidRankingModel presenter;
+    CovidRankingPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("Debug","llega al ranking");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_covid_ranking);
-        presenter = new CovidRankingModel(this);
+        presenter = new CovidRankingPresenter(this);
         recyclerView = findViewById(R.id.RecycleView);
         presenter.setStats();
     }
