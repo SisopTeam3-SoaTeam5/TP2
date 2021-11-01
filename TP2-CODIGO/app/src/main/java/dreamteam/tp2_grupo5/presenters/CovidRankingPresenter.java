@@ -136,7 +136,12 @@ public class CovidRankingPresenter implements SensorEventListener, AsyncInterfac
     }
 
     private void resortFunction(ArrayList<RankingItem> values, String order){
-        values.sort(new RankingItemComparator().reversed());
+
+        if(order.equals("DtoA"))
+            values.sort(new RankingItemComparator());
+        else if(order.equals("AtoD"))
+            values.sort(new RankingItemComparator().reversed());
+
         HashMap<Integer, RankingItem> newStats = new HashMap<>();
         Integer i = 0;
 
