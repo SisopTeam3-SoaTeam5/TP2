@@ -15,8 +15,8 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import dreamteam.tp2_grupo5.R;
-import dreamteam.tp2_grupo5.clienteHttp.AsyncInterface;
 import dreamteam.tp2_grupo5.presenters.CovidRankingModel;
+import dreamteam.tp2_grupo5.CustomAdapter;
 
 public class CovidRanking extends AppCompatActivity {
 

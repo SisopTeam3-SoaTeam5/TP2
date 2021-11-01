@@ -4,10 +4,10 @@ import android.content.SharedPreferences;
 
 import dreamteam.tp2_grupo5.clienteHttp.MetricsInterface;
 
-public class LoginModel implements MetricsInterface {
+public class PreferencesModel implements MetricsInterface {
     SharedPreferences sharedPreferences;
 
-    public LoginModel(SharedPreferences sharedPreferences) {
+    public PreferencesModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 

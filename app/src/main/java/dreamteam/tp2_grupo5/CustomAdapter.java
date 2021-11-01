@@ -1,4 +1,4 @@
-package dreamteam.tp2_grupo5.views;
+package dreamteam.tp2_grupo5;
 
 import android.content.Context;
 import android.view.LayoutInflater;

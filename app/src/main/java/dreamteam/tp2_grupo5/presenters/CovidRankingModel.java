@@ -23,7 +23,7 @@ import dreamteam.tp2_grupo5.comparators.RankingItemComparator;
 import dreamteam.tp2_grupo5.models.RankingItem;
 import dreamteam.tp2_grupo5.session.SessionManager;
 import dreamteam.tp2_grupo5.views.CovidRanking;
-import dreamteam.tp2_grupo5.views.CustomAdapter;
+import dreamteam.tp2_grupo5.CustomAdapter;
 
 public class CovidRankingModel implements SensorEventListener, AsyncInterface {
 

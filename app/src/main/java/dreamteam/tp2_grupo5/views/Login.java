@@ -31,7 +31,6 @@ public class Login extends AppCompatActivity {
         loading.setVisibility(View.GONE);
         email = findViewById(R.id.editTextTextEmailAddress);
         password = findViewById(R.id.editTextTextPassword);
-        sharedPreferences = getSharedPreferences("Login",Context.MODE_PRIVATE); //Donde se crea la SharedPreference si se mueve a un model
         loginButton = findViewById(R.id.button);
         loginPresenter = new LoginPresenter(Login.this);
     }
