@@ -28,6 +28,12 @@ public class CovidRanking extends AppCompatActivity {
         presenter.setStats();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.listenSensors();
+    }
+
     public void setAdapter(CustomAdapter customAdapter) {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -44,8 +50,8 @@ public class CovidRanking extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        presenter.unregisterSensor();
         super.onStop();
+        presenter.unregisterSensor();
     }
 }
 

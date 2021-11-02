@@ -37,10 +37,13 @@ public class CovidRankingPresenter implements SensorEventListener, AsyncInterfac
 
     public CovidRankingPresenter(CovidRanking activity) {
         this.activity = activity;
+        rankingModel =  new PreferencesModel(activity.getSharedPreferences("Shake", Context.MODE_PRIVATE));
         sensor = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+    }
+
+    public void listenSensors(){
         registerSensor(Sensor.TYPE_ACCELEROMETER);
         registerSensor(Sensor.TYPE_LIGHT);
-        rankingModel =  new PreferencesModel(activity.getSharedPreferences("Shake", Context.MODE_PRIVATE));
     }
 
     public void setStats() {
